@@ -1,0 +1,125 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="obu_use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="obu_enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="obu_target_ip" default="127.0.0.1" description="Target IP of RSU." />
+
+  <!-- World Robot State Publisher -->
+  <node
+    pkg="robot_state_publisher"
+    exec="robot_state_publisher"
+    name="robot_state_publisher"
+    namespace="obu"
+    output="screen">
+    <param name="use_sim_time" value="$(var obu_use_sim_time)" />
+    <param name="robot_description" value="$(command 'cat $(find-pkg-share ufil_examples_cpm_lab)/urdf/utm_32n.urdf.xml')" />
+  </node>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/single_obu.launch.xml">
+    <arg name="single_obu_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="single_obu_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="single_obu_vehicle_id" value="19" />
+    <arg name="single_obu_target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/single_obu.launch.xml">
+    <arg name="single_obu_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="single_obu_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="single_obu_vehicle_id" value="18" />
+    <arg name="single_obu_target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/single_obu.launch.xml">
+    <arg name="single_obu_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="single_obu_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="single_obu_vehicle_id" value="17" />
+    <arg name="single_obu_target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/single_obu.launch.xml">
+    <arg name="single_obu_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="single_obu_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="single_obu_vehicle_id" value="15" />
+    <arg name="single_obu_target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/single_obu.launch.xml">
+    <arg name="single_obu_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="single_obu_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="single_obu_vehicle_id" value="13" />
+    <arg name="single_obu_target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/single_obu.launch.xml">
+    <arg name="single_obu_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="single_obu_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="single_obu_vehicle_id" value="12" />
+    <arg name="single_obu_target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm_lab_adapter.launch.xml">
+    <arg name="cpm_lab_adapter_namespace" value="obu" />
+    <arg name="cpm_lab_adapter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="cpm_lab_adapter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="cpm_lab_adapter_output_list_topic" value="object_list_unfiltered" />
+    <arg name="cpm_lab_adapter_target_frame" value="map" />
+    <arg name="cpm_lab_adapter_vehicle_id" value="19" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm_lab_adapter.launch.xml">
+    <arg name="cpm_lab_adapter_namespace" value="obu" />
+    <arg name="cpm_lab_adapter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="cpm_lab_adapter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="cpm_lab_adapter_output_list_topic" value="object_list_unfiltered" />
+    <arg name="cpm_lab_adapter_target_frame" value="map" />
+    <arg name="cpm_lab_adapter_vehicle_id" value="18" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm_lab_adapter.launch.xml">
+    <arg name="cpm_lab_adapter_namespace" value="obu" />
+    <arg name="cpm_lab_adapter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="cpm_lab_adapter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="cpm_lab_adapter_output_list_topic" value="object_list_unfiltered" />
+    <arg name="cpm_lab_adapter_target_frame" value="map" />
+    <arg name="cpm_lab_adapter_vehicle_id" value="17" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm_lab_adapter.launch.xml">
+    <arg name="cpm_lab_adapter_namespace" value="obu" />
+    <arg name="cpm_lab_adapter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="cpm_lab_adapter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="cpm_lab_adapter_output_list_topic" value="object_list_unfiltered" />
+    <arg name="cpm_lab_adapter_target_frame" value="map" />
+    <arg name="cpm_lab_adapter_vehicle_id" value="15" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm_lab_adapter.launch.xml">
+    <arg name="cpm_lab_adapter_namespace" value="obu" />
+    <arg name="cpm_lab_adapter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="cpm_lab_adapter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="cpm_lab_adapter_output_list_topic" value="object_list_unfiltered" />
+    <arg name="cpm_lab_adapter_target_frame" value="map" />
+    <arg name="cpm_lab_adapter_vehicle_id" value="13" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm_lab_adapter.launch.xml">
+    <arg name="cpm_lab_adapter_namespace" value="obu" />
+    <arg name="cpm_lab_adapter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="cpm_lab_adapter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="cpm_lab_adapter_output_list_topic" value="object_list_unfiltered" />
+    <arg name="cpm_lab_adapter_target_frame" value="map" />
+    <arg name="cpm_lab_adapter_vehicle_id" value="12" />
+  </include>
+
+  <!-- Filter launch -->
+  <include file="$(find-pkg-share ufil_message_filter)/launch/object_list_position_filter.launch.xml">
+    <arg name="object_list_position_filter_namespace" value="obu" />
+    <arg name="object_list_position_filter_use_sim_time" value="$(var obu_use_sim_time)" />
+    <arg name="object_list_position_filter_enable_stats" value="$(var obu_enable_stats)" />
+    <arg name="object_list_position_filter_input_topic" value="object_list_unfiltered" />
+    <arg name="object_list_position_filter_output_topic" value="object_list" />
+    <arg name="object_list_position_filter_area_of_interest" value="[81.0, 30.0, 81.0, 46.0, 0.0, 46.0, 0.0, 30.0]" />
+  </include>
+
+
+</launch>

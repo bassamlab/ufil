@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="vehicle_detection_base_namespace" default="ssl"/>
+  <arg name="vehicle_detection_use_sim_time" default="true"/>
+  <arg name="vehicle_detection_enable_stats" default="false"/>
+  <arg name="vehicle_detection_output_topic" default="vehicle_tracks"/>
+  <arg name="vehicle_detection_input_topic" default="wheel_tracks"/>
+  <arg name="vehicle_detection_vehicle_templates" default="['$(find-pkg-share ssl_vehicle_detection)/templates/muCar_scaled_lab.json']"/>
+
+  <!-- Launch the central fusion node inside its namespace -->
+  <group>
+    <push-ros-namespace namespace="$(var vehicle_detection_base_namespace)"/>
+    <node
+      pkg="ssl_vehicle_detection"
+      exec="ssl_vehicle_detection_node"
+      name="ssl_vehicle_detection"
+      output="screen">
+      <param name="use_sim_time" value="$(var vehicle_detection_use_sim_time)" />
+      <param name="enable_stats" value="$(var vehicle_detection_enable_stats)" />
+      <param name="vehicle_templates" value="$(var vehicle_detection_vehicle_templates)" />
+      <remap from="vehicles" to="$(var vehicle_detection_output_topic)"/>
+      <remap from="wheel_tracks" to="$(var vehicle_detection_input_topic)"/>
+    </node>
+  </group>
+</launch>

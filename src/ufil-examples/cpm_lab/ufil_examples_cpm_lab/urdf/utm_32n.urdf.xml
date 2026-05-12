@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="sfb_demonstrator">
+  <link name="utm_32n"> </link>
+  <link name="map"> </link>
+  <link name="map_utm"> </link>
+
+  <joint name="utm_32n_to_map" type="fixed">
+    <parent link="utm_32n" />
+    <child link="map_utm" />
+    <origin xyz="696303.25 5328527.39 0" />
+  </joint>
+
+  <joint name="map_to_map_utm" type="fixed">
+    <parent link="map_utm" />
+    <child link="map" />
+    <origin xyz="0 0 0" rpy="0 0 -1.19" />
+  </joint>
+</robot>

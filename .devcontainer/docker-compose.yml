@@ -1,0 +1,20 @@
+services:
+  dev:
+    env_file: .env
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.ufil
+      args:
+        USERNAME: ufil
+    environment:
+      DISPLAY: ${DISPLAY}
+      ROS_AUTOMATIC_DISCOVERY_RANGE: SUBNET
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID}
+    ports:
+      - "8765:8765"
+    volumes:
+      - ..:/home/ufil/ws
+      - ${HOME}/.gitconfig:/home/ufil/.gitconfig
+      - ${HOME}/.ssh:/home/ufil/.ssh:ro
+      - ${BAGS_DIR}:/bags:ro
+    command: sleep infinity

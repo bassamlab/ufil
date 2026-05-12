@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="simulation_base_namespace" default="ssl"/>
+  <arg name="simulation_use_sim_time" default="true"/>
+  <arg name="simulation_enable_stats" default="false"/>
+  <arg name="simulation_input_topic" default="obu/cam/object_list"/>
+  <arg name="simulation_threshold" default="10"/>
+  <arg name="simulation_node_id" default="1"/>
+  <arg name="simulation_stale_seconds" default="0.5"/>
+  <arg name="simulation_width" default="10.0"/>
+  <arg name="simulation_height" default="5.0"/>
+  <arg name="simulation_resolution" default="0.2"/>
+  <arg name="simulation_x" default="0.0"/>
+  <arg name="simulation_y" default="0.0"/>
+  <arg name="simulation_z" default="0.011"/>
+  <arg name="simulation_heading" default="0.0"/>
+  <arg name="simulation_microscale" default="false"/>
+
+  <group>
+    <push-ros-namespace namespace="$(var simulation_base_namespace)"/>
+    <node
+      pkg="ssl_instance_virtual"
+      exec="ssl_virtual_component_node"
+      name="ssl_virtual_component_node"
+      output="screen">
+      <param name="use_sim_time" value="$(var simulation_use_sim_time)" />
+      <param name="enable_stats" value="$(var simulation_enable_stats)" />
+      <param name="threshold" value="$(var simulation_threshold)" />
+      <param name="node_id" value="$(var simulation_node_id)" />
+      <param name="stale_seconds" value="$(var simulation_stale_seconds)" />
+      <param name="width" value="$(var simulation_width)" />
+      <param name="height" value="$(var simulation_height)" />
+      <param name="resolution" value="$(var simulation_resolution)" />
+      <param name="x" value="$(var simulation_x)" />
+      <param name="y" value="$(var simulation_y)" />
+      <param name="z" value="$(var simulation_z)" />
+      <param name="heading" value="$(var simulation_heading)" />
+      <param name="microscale" value="$(var simulation_microscale)" />
+      <remap from="object_list" to="$(var simulation_input_topic)"/>
+    </node>
+  </group>
+</launch>

@@ -1,0 +1,73 @@
+stages:
+  - code-quality-test
+  - check-for-uncrustify
+  - package-quality-test
+  - code-analysis-test
+  - unit-test
+
+lint-cmake-job:
+  stage: code-quality-test
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Linting cmake..."
+    - ament_lint_cmake
+    - echo "No lint issues found in cmake file."
+
+lint-cpp-job:
+  stage: code-quality-test
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Linting cpp..."
+    - ament_cpplint
+    - echo "No lint issues found in cpp files."
+
+uncrustify-check-job:
+  stage: check-for-uncrustify
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Checking uncrustify..."
+    - ament_uncrustify
+    - echo "No issues found with uncrustify."
+
+check-xml-job:
+  stage: package-quality-test
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Linting xml..."
+    - ament_xmllint
+    - echo "No lint issues found in xml files."
+
+check-copyright-job:
+  stage: package-quality-test
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Check for copyright..."
+    - ament_copyright
+    - echo "No issues found with copyright notices in files."
+
+analyse-cpp-job:
+  stage: code-analysis-test
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Analysing cpp..."
+    - export AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS=1
+    - ament_cppcheck
+    - echo "No issues found in static analysis of cpp files."
+
+unit-test-job:
+  stage: unit-test
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  script:
+    - echo "Builing unit tests..."
+    - mkdir -p /tmp/ws/src/
+    - cp -r ${CI_PROJECT_DIR} /tmp/ws/src/
+    - cd /tmp/ws/
+    - apt update
+    - rosdep update
+    - rosdep install --from-paths src -y --ignore-src
+    - colcon build
+    - echo "No issues found while building unit tests."
+    - echo "Running gtest..."
+    - cd ./build/ufil_object_tracking/
+    - find . -name '*_test' -exec "{}" \;
+    - echo "No issues found in unit tests."

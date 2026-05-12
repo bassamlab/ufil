@@ -1,0 +1,48 @@
+FROM node:24 AS build
+
+ARG API_URL
+ARG LICHTBLICK_VERSION
+
+RUN if [ -z "$API_URL" ]; then \
+  echo "API_URL build-arg is required" >&2; \
+  exit 1; \
+  fi
+
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+RUN git clone --depth 1 --branch "$LICHTBLICK_VERSION" https://github.com/lichtblick-suite/lichtblick.git ./
+RUN corepack enable
+RUN yarn install --immutable
+RUN API_URL="$API_URL" yarn run web:build:prod
+
+FROM caddy:2-alpine
+
+WORKDIR /src
+COPY --from=build /src/web/.webpack ./
+EXPOSE 8080
+
+ARG DEFAULT_URI
+
+COPY <<EOF /entrypoint.sh
+#!/bin/sh
+if [ -f /lichtblick/default-layouts/default-layout.json ]; then
+  sed -i "s#default-layout-placeholder#\$(cat /lichtblick/default-layouts/default-layout.json)#g" /src/index.html
+fi
+exec "\$@"
+EOF
+
+COPY <<EOF /etc/caddy/Caddyfile
+:8080 {
+  root * /src
+  file_server
+  @root {
+    path /
+    query
+  }
+  redir @root ${DEFAULT_URI}
+}
+EOF
+
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]

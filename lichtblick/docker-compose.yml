@@ -1,0 +1,44 @@
+networks:
+  lichtblick:
+    driver: bridge
+
+services:
+  extension-builder:
+    profiles:
+      - extensions
+    image: node:24-bookworm-slim
+    working_dir: /home/ufil/ws
+    volumes:
+      - ..:/home/ufil/ws
+    command: /bin/bash -lc "lichtblick/scripts/buildExtensions.sh"
+
+  lichtblick-api:
+    build:
+      context: ..
+      dockerfile: lichtblick/Dockerfile.api
+    networks:
+      - lichtblick
+    environment:
+      LICHTBLICK_WORKSPACES_DIR: /home/ufil/ws/lichtblick/workspaces
+      LICHTBLICK_API_HOST: 0.0.0.0
+      LICHTBLICK_API_PORT: ${LICHTBLICK_API_PORT:-8766}
+      LICHTBLICK_ALLOWED_ORIGINS: http://localhost:8080,http://127.0.0.1:8080
+    ports:
+      - "${LICHTBLICK_API_PORT:-8766}:${LICHTBLICK_API_PORT:-8766}"
+    volumes:
+      - ..:/home/ufil/ws
+
+  lichtblick:
+    build:
+      context: ..
+      dockerfile: lichtblick/Dockerfile.web
+      args:
+        API_URL: ${LICHTBLICK_API_URL:-http://localhost:8766}
+        DEFAULT_URI: ${DEFAULT_URI:-/?ds=foxglove-websocket&ds.url=ws://localhost:8765&workspace=ufil}
+        LICHTBLICK_VERSION: ${LICHTBLICK_VERSION:-v1.24.3}
+    networks:
+      - lichtblick
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./workspaces:/lichtblick/workspaces:ro

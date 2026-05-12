@@ -1,0 +1,15 @@
+<launch>
+  <arg name="lanelet_map_marker_array_use_sim_time" default="true" description="Use simulated time." />
+  <arg name="lanelet_map_marker_array_namespace" default="" description="Namespace for the lanelet map marker node." />
+  <arg name="lanelet_map_marker_array_map_path" default="" description="Path to the Lanelet2 OSM map." />
+  <arg name="lanelet_map_marker_array_frame_id" default="map" description="Frame ID for the published map." />
+  <arg name="lanelet_map_marker_array_config_file" default="$(find-pkg-share ufil_visualization)/config/lanelet_map_marker_array.yaml" description="Path to the lanelet map marker array parameter file." />
+  <arg name="lanelet_map_marker_array_node_name" default="lanelet_map_marker_array_node" description="Node name." />
+
+  <node pkg="ufil_visualization" exec="lanelet_map_marker_array_node" name="$(var lanelet_map_marker_array_node_name)" namespace="$(var lanelet_map_marker_array_namespace)" output="screen">
+    <param name="use_sim_time" value="$(var lanelet_map_marker_array_use_sim_time)" />
+    <param name="map_path" value="$(var lanelet_map_marker_array_map_path)" />
+    <param name="frame_id" value="$(var lanelet_map_marker_array_frame_id)" />
+    <param from="$(var lanelet_map_marker_array_config_file)" />
+  </node>
+</launch>

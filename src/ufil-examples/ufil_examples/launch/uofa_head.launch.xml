@@ -1,0 +1,53 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+
+  <!-- Include visualization bridge -->
+  <include file="$(find-pkg-share ufil_examples_uofa)/launch/bridge.launch.xml">
+    <let name="use_sim_time" value="$(var use_sim_time)" />
+    <let name="enable_stats" value="$(var enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <let name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <let name="object_list_marker_array_input_topic" value="/obu/object_list" />
+    <let name="object_list_marker_array_output_topic" value="/obu/object_markers" />
+    <let name="object_list_marker_array_node_name" value="object_list_marker_array_obu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <let name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <let name="object_list_marker_array_input_topic" value="/osn/object_list" />
+    <let name="object_list_marker_array_output_topic" value="/osn/object_markers" />
+    <let name="object_list_marker_array_node_name" value="object_list_marker_array_osn" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <let name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <let name="object_list_marker_array_input_topic" value="/rsu/object_list" />
+    <let name="object_list_marker_array_output_topic" value="/rsu/object_markers" />
+    <let name="object_list_marker_array_node_name" value="object_list_marker_array_rsu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <let name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <let name="object_list_marker_array_input_topic" value="/rsu/cam/object_list" />
+    <let name="object_list_marker_array_output_topic" value="/rsu/cam/object_markers" />
+    <let name="object_list_marker_array_node_name" value="object_list_marker_array_rsu_cam" />
+  </include>
+
+  <!-- Lanelet map server -->
+  <include file="$(find-pkg-share ufil_visualization)/launch/lanelet_map_marker_array.launch.xml">
+    <let name="lanelet_map_marker_array_map_path" value="$(find-pkg-share ufil_examples_uofa)/maps/UofA Parking Lot.osm" />
+    <let name="lanelet_map_marker_array_frame_id" value="map_utm" />
+  </include>
+
+  <!-- Include obu -->
+  <include file="$(find-pkg-share ufil_examples_uofa)/launch/obu.launch.xml">
+    <let name="obu_use_sim_time" value="$(var use_sim_time)" />
+    <let name="obu_enable_stats" value="$(var enable_stats)" />
+    <let name="obu_target_ip" value="192.168.1.41" />
+  </include>
+
+</launch>

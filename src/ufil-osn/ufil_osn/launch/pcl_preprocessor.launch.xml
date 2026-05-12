@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- ========================= -->
+  <!-- Arguments (ALL prefixed)  -->
+  <!-- ========================= -->
+
+  <!-- Topics -->
+  <arg name="pcl_preprocessor_input_topic" default="input_cloud"/>
+  <arg name="pcl_preprocessor_output_topic" default="cloud"/>
+  <arg name="pcl_preprocessor_occlusion_output_topic" default="dynamic_occlusion_grid"/>
+
+  <!-- Namespace -->
+  <arg name="pcl_preprocessor_namespace" default="osn"/>
+
+  <!-- Filter parameters -->
+  <arg name="pcl_preprocessor_filter_voxel_size" default="0.1"/>
+  <arg name="pcl_preprocessor_filter_outlier_radius" default="0.5"/>
+  <arg name="pcl_preprocessor_filter_min_neighbors" default="40.0"/>
+  <arg name="pcl_preprocessor_filter_z_min" default="0.2"/>
+  <arg name="pcl_preprocessor_filter_z_max" default="5.0"/>
+
+  <!-- Frame/time -->
+  <arg name="pcl_preprocessor_target_frame" default="sensor_node_base"/>
+  <arg name="pcl_preprocessor_use_ros_time" default="false"/>
+  <arg name="pcl_preprocessor_use_sim_time" default="false"/>
+
+  <!-- FOV estimator -->
+  <arg name="pcl_preprocessor_fov_num_bins" default="150"/>
+  <arg name="pcl_preprocessor_fov_history_length" default="60"/>
+  <arg name="pcl_preprocessor_fov_max_range" default="32.0"/>
+
+  <!-- Depth buffer -->
+  <arg name="pcl_preprocessor_depth_buffer_history_length" default="10"/>
+  <arg name="pcl_preprocessor_depth_buffer_min_range" default="5.0"/>
+  <arg name="pcl_preprocessor_depth_buffer_max_range" default="44.0"/>
+  <arg name="pcl_preprocessor_depth_buffer_grid_resolution" default="0.4"/>
+  <arg name="pcl_preprocessor_depth_buffer_grid_size_x" default="80.0"/>
+  <arg name="pcl_preprocessor_depth_buffer_grid_size_y" default="80.0"/>
+  <arg name="pcl_preprocessor_depth_buffer_decay_rate" default="0.8"/>
+  <arg name="pcl_preprocessor_depth_buffer_az_bins" default="500"/>
+  <arg name="pcl_preprocessor_depth_buffer_el_bins" default="100"/>
+  <arg name="pcl_preprocessor_depth_buffer_preprocess_T_low" default="30"/>
+  <arg name="pcl_preprocessor_depth_buffer_preprocess_T_high" default="40"/>
+  <arg name="pcl_preprocessor_depth_buffer_preprocess_K" default="3"/>
+  <arg name="pcl_preprocessor_depth_buffer_preprocess_R" default="1"/>
+  <arg name="pcl_preprocessor_depth_buffer_preprocess_min_count" default="4"/>
+
+  <!-- Optional static file -->
+  <arg name="pcl_preprocessor_static_object_file" default=""/>
+
+  <!-- Stats/debug -->
+  <arg name="pcl_preprocessor_enable_stats" default="false"/>
+
+  <!-- ========================= -->
+  <!-- Node                      -->
+  <!-- ========================= -->
+
+  <group>
+    <push-ros-namespace namespace="$(var pcl_preprocessor_namespace)"/>
+
+    <node
+      pkg="ufil_pcl_preprocessor"
+      exec="ufil_pcl_preprocessor_node"
+      name="ufil_pcl_preprocessor_node"
+      output="screen">
+
+      <!-- ROS time -->
+      <param name="use_sim_time" value="$(var pcl_preprocessor_use_sim_time)"/>
+      <param name="use_ros_time" value="$(var pcl_preprocessor_use_ros_time)"/>
+
+      <!-- Frame -->
+      <param name="target_frame" value="$(var pcl_preprocessor_target_frame)"/>
+
+      <!-- Filter parameters -->
+      <param name="filter_voxel_size" value="$(var pcl_preprocessor_filter_voxel_size)"/>
+      <param name="filter_outlier_radius" value="$(var pcl_preprocessor_filter_outlier_radius)"/>
+      <param name="filter_min_number_of_neighbors" value="$(var pcl_preprocessor_filter_min_neighbors)"/>
+      <param name="filter_z_min" value="$(var pcl_preprocessor_filter_z_min)"/>
+      <param name="filter_z_max" value="$(var pcl_preprocessor_filter_z_max)"/>
+
+      <!-- FOV estimator -->
+      <param name="fov_num_bins" value="$(var pcl_preprocessor_fov_num_bins)"/>
+      <param name="fov_history_length" value="$(var pcl_preprocessor_fov_history_length)"/>
+      <param name="fov_max_range" value="$(var pcl_preprocessor_fov_max_range)"/>
+
+      <!-- Depth buffer -->
+      <param name="depth_buffer_history_length" value="$(var pcl_preprocessor_depth_buffer_history_length)"/>
+      <param name="depth_buffer_min_range" value="$(var pcl_preprocessor_depth_buffer_min_range)"/>
+      <param name="depth_buffer_max_range" value="$(var pcl_preprocessor_depth_buffer_max_range)"/>
+      <param name="depth_buffer_grid_resolution" value="$(var pcl_preprocessor_depth_buffer_grid_resolution)"/>
+      <param name="depth_buffer_grid_size_x" value="$(var pcl_preprocessor_depth_buffer_grid_size_x)"/>
+      <param name="depth_buffer_grid_size_y" value="$(var pcl_preprocessor_depth_buffer_grid_size_y)"/>
+      <param name="depth_buffer_decay_rate" value="$(var pcl_preprocessor_depth_buffer_decay_rate)"/>
+      <param name="depth_buffer_az_bins" value="$(var pcl_preprocessor_depth_buffer_az_bins)"/>
+      <param name="depth_buffer_el_bins" value="$(var pcl_preprocessor_depth_buffer_el_bins)"/>
+      <param name="depth_buffer_preprocess_T_low" value="$(var pcl_preprocessor_depth_buffer_preprocess_T_low)"/>
+      <param name="depth_buffer_preprocess_T_high" value="$(var pcl_preprocessor_depth_buffer_preprocess_T_high)"/>
+      <param name="depth_buffer_preprocess_K" value="$(var pcl_preprocessor_depth_buffer_preprocess_K)"/>
+      <param name="depth_buffer_preprocess_R" value="$(var pcl_preprocessor_depth_buffer_preprocess_R)"/>
+      <param name="depth_buffer_preprocess_min_count" value="$(var pcl_preprocessor_depth_buffer_preprocess_min_count)"/>
+
+      <!-- Debug -->
+      <param name="enable_stats" value="$(var pcl_preprocessor_enable_stats)"/>
+
+      <!-- Optional object file -->
+      <param name="static_object_file" value="$(var pcl_preprocessor_static_object_file)"/>
+
+      <!-- Remappings -->
+      <remap from="input_cloud" to="$(var pcl_preprocessor_input_topic)"/>
+      <remap from="cloud" to="$(var pcl_preprocessor_output_topic)"/>
+      <remap from="dynamic_occlusion_grid" to="$(var pcl_preprocessor_occlusion_output_topic)"/>
+
+    </node>
+
+  </group>
+
+</launch>

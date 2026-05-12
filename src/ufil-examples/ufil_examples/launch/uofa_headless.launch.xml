@@ -1,0 +1,23 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+
+  <!-- Include osn -->
+  <include file="$(find-pkg-share ufil_examples_uofa)/launch/osn.launch.xml">
+    <let name="use_sim_time" value="$(var use_sim_time)" />
+    <let name="enable_stats" value="$(var enable_stats)" />
+  </include>
+
+  <!-- Include central fusion -->
+  <include file="$(find-pkg-share ufil_examples_uofa)/launch/central_fusion.launch.xml">
+    <let name="use_sim_time" value="$(var use_sim_time)" />
+    <let name="enable_stats" value="$(var enable_stats)" />
+  </include>
+
+  <!-- Include RSU -->
+  <include file="$(find-pkg-share ufil_examples_uofa)/launch/rsu.launch.xml">
+    <let name="use_sim_time" value="$(var use_sim_time)" />
+    <let name="enable_stats" value="$(var enable_stats)" />
+  </include>
+</launch>

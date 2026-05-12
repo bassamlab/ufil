@@ -1,0 +1,36 @@
+# Transformation parameters
+transformation:
+  x_shift: 0.0
+  y_shift: 0.0
+  theta: 0.0
+
+# Preprocessing padding (in frames)
+preprocessing:
+  front_padding: 5
+  rear_padding: 5
+  max_time_gap: 2.0
+
+# Interpolation/filter thresholds
+thresholds:
+  min_track_length: 10
+  max_position_rmse: 3.0
+  max_dimension_rmse: 3.0
+
+# Orientation correction
+orientation:
+  wrap_check_iterations: 4
+  wrap_upper: 2.0
+  wrap_lower: -2.0
+
+classes_map:
+  0: 'car'
+  1: 'truck'
+  2: 'motorcycle'
+  3: 'bicycle'
+  4: 'pedestrian'
+  5: 'stationary'
+
+output:
+  save_plots: true
+  save_metrics: true
+  save_objects: true

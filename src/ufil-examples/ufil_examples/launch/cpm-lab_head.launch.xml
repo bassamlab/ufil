@@ -1,0 +1,57 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <include file="$(find-pkg-share ufil_visualization)/launch/lanelet_map_marker_array.launch.xml">
+    <arg name="lanelet_map_marker_array_map_path" value="$(find-pkg-share ufil_examples_cpm_lab)/maps/A61 Lanelet2.osm" />
+    <arg name="lanelet_map_marker_array_frame_id" value="map_utm" />
+  </include>
+  <!-- Include visualization bridge -->
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/bridge.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/obu/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/obu/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_obu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/osn/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/osn/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_osn" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/ssl/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/ssl/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_ssl" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/rsu/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/rsu/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_rsu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/rsu/cam/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/rsu/cam/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_rsu_cam" />
+  </include>
+
+  <!-- Include obu -->
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/obu.launch.xml">
+    <arg name="obu_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="obu_enable_stats" value="$(var enable_stats)" />
+    <arg name="obu_target_ip" value="192.168.1.41" />
+  </include>
+
+</launch>

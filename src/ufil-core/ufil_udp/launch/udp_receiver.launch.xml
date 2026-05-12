@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="udp_receiver_listen_port" default="5000" description="Listening port number" />
+  <arg name="udp_receiver_output_topic" default="udp_output" description="Output topic name" />
+  <arg name="udp_receiver_enable_stats" default="false" description="Enable packet reception statistics" />
+  <arg name="udp_receiver_use_sim_time" default="false" description="Use simulation time" />
+  <arg name="udp_receiver_namespace" default="" description="Namespace for the UDP receiver node." />
+  <arg name="udp_receiver_node_name" default="udp_receiver" description="UDP receiver node name." />
+
+  <node pkg="ufil_udp" exec="udp_receive_node" name="$(var udp_receiver_node_name)" namespace="$(var udp_receiver_namespace)" output="screen">
+    <param name="listen_port" value="$(var udp_receiver_listen_port)" />
+    <param name="enable_stats" value="$(var udp_receiver_enable_stats)" />
+    <param name="use_sim_time" value="$(var udp_receiver_use_sim_time)" />
+    <remap from="udp_output" to="$(var udp_receiver_output_topic)" />
+  </node>
+</launch>
