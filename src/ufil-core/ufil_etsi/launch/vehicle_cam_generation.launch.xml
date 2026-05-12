@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="vehicle_cam_generator_use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="vehicle_cam_generator_namespace" default="" description="Namespace for the vehicle CAM generator node." />
+  <arg name="vehicle_cam_generator_node_name" default="vehicle_cam_generator_node" description="Vehicle CAM generator node name." />
+  <arg name="vehicle_cam_generator_input_topic" default="object" description="Object input topic name" />
+  <arg name="vehicle_cam_generator_output_topic" default="cam" description="Cam output topic name" />
+  <arg name="vehicle_cam_generator_time_shift_nanosec" default="0" description="Time Shift for cam messages as they need to start at 2004" />
+  <arg name="vehicle_cam_generator_enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="vehicle_cam_generator_target_frame" default="utm_32n" description="Transforms input message before sending." />
+  <arg name="vehicle_cam_generator_object_array_index" default="0" description="Selects a specific element from the object array." />
+
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node" name="$(var vehicle_cam_generator_node_name)" namespace="$(var vehicle_cam_generator_namespace)" output="screen">
+    <param name="use_sim_time" value="$(var vehicle_cam_generator_use_sim_time)" />
+    <param name="vehicle_role" value="0" />
+    <param name="enable_stats" value="$(var vehicle_cam_generator_enable_stats)" />
+    <param name="time_shift_nanosec" value="$(var vehicle_cam_generator_time_shift_nanosec)" />
+    <param name="target_frame" value="$(var vehicle_cam_generator_target_frame)" />
+    <param name="object_array_index" value="$(var vehicle_cam_generator_object_array_index)" />
+    <remap from="object" to="$(var vehicle_cam_generator_input_topic)" />
+    <remap from="cam" to="$(var vehicle_cam_generator_output_topic)" />
+  </node>
+</launch>

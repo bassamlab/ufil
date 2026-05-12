@@ -1,0 +1,32 @@
+/**:
+  ros__parameters:
+    num_sensors: 3  
+    
+    #                        extr  cartr   trucktr mototr pedtr bictr  stattr  othtr  topic
+    sensor_2_configuration: ["0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "/osn/object_list", "false"]
+
+    sensor_3_configuration: ["0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "/ssl/object_list", "false"]
+
+    sensor_1_configuration: ["0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "/rsu/cam/object_list", "true"]
+
+    min_existence_weight: 0.2
+
+    max_existence_weight: 0.8
+
+    existence_decay_factor: 0.05
+
+    delta_d: 0.1
+
+    alpha: 0.95
+
+    p_min: 0.1
+
+    p_ref: 0.5
+
+    p_max: 0.9
+
+    association_threshold: 3.0
+
+    timer_period_ms: 20
+
+    buffer_time: 2.0

@@ -1,0 +1,61 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true"
+    description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+
+  <!-- Include OSN -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/osn.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="robot_description" value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/highway.urdf.xml')" />
+    <arg name="static_object_file" value="$(find-pkg-share ufil_examples_carla)/config/static_object_file.highway.csv" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/obu/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/obu/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_obu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/osn/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/osn/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_osn" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/rsu/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/rsu/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_rsu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/rsu/cam/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/rsu/cam/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_rsu_cam" />
+  </include>
+
+  <!-- Include central fusion -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/central_fusion.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="object_list_position_filter_area_of_interest" value="[201.0, -1.5, 201.0, 79.5, 217.0, 79.5, 217.0, -1.5]" />
+  </include>
+
+  <!-- Include RSU -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/rsu.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+  </include>
+
+  <!-- Include SSL -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/ssl.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+  </include>
+</launch>

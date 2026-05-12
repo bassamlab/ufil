@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="host" default="192.168.1.77" description="OSC broker host" />
+  <arg name="port" default="8200" description="OSC broker port" />
+  <arg name="source_topic" default="/lane_control_lights" description="ROS topic to subscribe" />
+  <arg name="osc_address" default="/lane_control_light" description="OSC address to publish" />
+
+  <node
+      pkg="ufil_examples_cpm_lab_adapter"
+      exec="ufil_examples_osc_message_converter_node"
+      name="ufil_examples_osc_message_converter_node"
+      output="screen">
+
+    <param name="host" value="$(var host)" />
+    <param name="port" value="$(var port)" />
+    <param name="source_topic" value="$(var source_topic)" />
+    <param name="osc_address" value="$(var osc_address)" />
+  </node>
+</launch>

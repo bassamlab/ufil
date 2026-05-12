@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Define arguments -->
+  <arg name="object_list_position_filter_input_topic" default="objects"/>
+  <arg name="object_list_position_filter_output_topic" default="objects_filtered"/>
+  <arg name="object_list_position_filter_namespace" default="core"/>
+  <arg name="object_list_position_filter_enable_stats" default="false"/>
+  <arg name="object_list_position_filter_use_sim_time" default="true"/>
+  <arg name="object_list_position_filter_area_of_interest" default=""/>
+  <arg name="object_list_position_filter_node_name" default="object_list_position_filter" description="Object list position filter node name." />
+
+  <!-- Launch the object list position filter node inside its namespace -->
+  <node
+    pkg="ufil_message_filter"
+    exec="object_list_position_filter_node"
+    name="$(var object_list_position_filter_node_name)"
+    namespace="$(var object_list_position_filter_namespace)"
+    output="screen">
+
+    <param name="area_of_interest" value="$(var object_list_position_filter_area_of_interest)"/>
+    <param name="use_sim_time" value="$(var object_list_position_filter_use_sim_time)"/>
+    <param name="enable_stats" value="$(var object_list_position_filter_enable_stats)"/>
+    <remap from="objects" to="$(var object_list_position_filter_input_topic)"/>
+    <remap from="objects_filtered" to="$(var object_list_position_filter_output_topic)"/>
+  </node>
+</launch>

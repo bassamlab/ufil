@@ -1,0 +1,25 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+
+  <!-- Robot State Publisher Node -->
+  <node
+    pkg="robot_state_publisher"
+    exec="robot_state_publisher"
+    name="robot_state_publisher"
+    namespace="rsu"
+    output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)" />
+    <param name="robot_description" value="$(command 'cat $(find-pkg-share ufil_examples_cpm_lab)/urdf/utm_32n.urdf.xml')" />
+  </node>
+
+  <!-- RSU launch include -->
+  <include file="$(find-pkg-share ufil_rsu)/launch/cam.launch.xml">
+    <arg name="cam_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="cam_base_namespace" value="rsu" />
+    <arg name="cam_enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="500000000000" />
+    <arg name="cam_target_frame" value="map" />
+  </include>
+</launch>

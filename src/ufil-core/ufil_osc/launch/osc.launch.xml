@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="osc_use_sim_time" default="false" description="Use simulation time" />
+  <arg name="osc_namespace" default="" description="Namespace for the OSC converter node." />
+  <arg name="osc_node_name" default="osc_message_converter_node" description="OSC converter node name." />
+  <arg name="osc_enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="osc_host" default="localhost" description="OSC broker osc_host" />
+  <arg name="osc_port" default="9000" description="OSC broker osc_port" />
+  <arg name="osc_source_topic" default="/lab/groundtruth" description="ROS topic to subscribe" />
+  <arg name="osc_address" default="/objects" description="OSC address to publish" />
+  <arg name="osc_message_type" default="object_list"
+       description="Message type: object_list or occupancy_grid" />
+
+  <node
+      pkg="ufil_osc"
+      exec="osc_message_converter_node"
+      name="$(var osc_node_name)"
+      namespace="$(var osc_namespace)"
+      output="screen">
+
+    <param name="use_sim_time" value="$(var osc_use_sim_time)" />
+    <param name="osc_host" value="$(var osc_host)" />
+    <param name="osc_port" value="$(var osc_port)" />
+    <param name="osc_source_topic" value="$(var osc_source_topic)" />
+    <param name="osc_address" value="$(var osc_address)" />
+    <param name="osc_message_type" value="$(var osc_message_type)" />
+
+  </node>
+</launch>

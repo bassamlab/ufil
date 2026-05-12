@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="wheel_detection_base_namespace" default="ssl"/>
+  <arg name="wheel_detection_use_sim_time" default="true"/>
+  <arg name="wheel_detection_enable_stats" default="false"/>
+  <arg name="wheel_detection_input_topic" default="load_map"/>
+  <arg name="wheel_detection_output_topic" default="wheel_detection"/>
+
+  <!-- Launch the central fusion node inside its namespace -->
+  <group>
+    <push-ros-namespace namespace="$(var wheel_detection_base_namespace)"/>
+    <node
+      pkg="ssl_wheel_detection"
+      exec="ssl_wheel_detection_node"
+      name="ssl_wheel_detection"
+      output="screen">
+      <param name="use_sim_time" value="$(var wheel_detection_use_sim_time)" />
+      <param name="enable_stats" value="$(var wheel_detection_enable_stats)" />
+      <remap from="load_map" to="$(var wheel_detection_input_topic)"/>
+      <remap from="wheel_detection" to="$(var wheel_detection_output_topic)"/>
+    </node>
+  </group>
+</launch>

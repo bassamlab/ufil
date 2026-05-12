@@ -1,0 +1,73 @@
+{
+  "objects": [
+    {
+      "type": "sensor.pseudo.objects",
+      "id": "objects"
+    },
+    {
+      "type": "sensor.pseudo.actor_list",
+      "id": "actor_list"
+    },
+    {
+      "type": "sensor.pseudo.markers",
+      "id": "markers"
+    },
+    {
+      "type": "sensor.pseudo.opendrive_map",
+      "id": "map"
+    },
+    {
+      "type": "sensor.pseudo.traffic_lights",
+      "id": "traffic_lights"
+    },
+    {
+      "type": "sensor.camera.rgb",
+      "id": "rgb_view_left",
+      "spawn_point": {
+        "x": 219.0,
+        "y": 70.0,
+        "z": 6.5,
+        "roll": 0.0,
+        "pitch": 20.0,
+        "yaw": -140.0
+      },
+      "image_size_x": 800,
+      "image_size_y": 600,
+      "fov": 90.0
+    },
+    {
+      "type": "sensor.camera.rgb",
+      "id": "rgb_view_right",
+      "spawn_point": {
+        "x": 219.0,
+        "y": 70.0,
+        "z": 6.5,
+        "roll": 0,
+        "pitch": 20.0,
+        "yaw": -170.0
+      },
+      "image_size_x": 800,
+      "image_size_y": 600,
+      "fov": 90.0
+    },
+    {
+      "type": "sensor.lidar.ray_cast",
+      "id": "lidar",
+      "spawn_point": {
+        "x": 219.0,
+        "y": 70.0,
+        "z": 6.5,
+        "roll": 180.0,
+        "pitch": 25.210140000000003,
+        "yaw": -131.78
+      },
+      "range": 60,
+      "upper_fov": 22.5,
+      "lower_fov": -22.5,
+      "horizontal_fov": 70,
+      "channels": 221.78,
+      "rotation_frequency": 20,
+      "points_per_second": 787500
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "lichtlick_bridge:run",
+			"type": "shell",
+			"command": "source ./install/setup.bash && ros2 launch foxglove_bridge foxglove_bridge_launch.xml",
+			"problemMatcher": []
+		},
+		{
+			"label": "colcon:build",
+			"type": "colcon",
+			"args": [
+				"build",
+				"--symlink-install",
+				"--event-handlers",
+				"console_cohesion+",
+				"--base-paths",
+				"/home/parallels/git/ufil-workspace",
+				"--cmake-args",
+				"-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+			],
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+		},
+		{
+			"label": "test:all",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"find . -name '*_test' -exec \"{}\" \\;"
+			],
+			"dependsOn": "colcon:build",
+			"options": {
+				"cwd": "${workspaceFolder}/build",
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+		},
+		{
+			"label": "test:current",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(basename $(git rev-parse --show-toplevel)) && find . -name '*_test' -exec \"{}\" \\;"
+			],
+			"dependsOn": "colcon:build",
+			"options": {
+				"cwd": "${fileDirname}",
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+			"group": {
+				"kind": "test"
+			},
+		},
+
+		{
+			"label": "check:all",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"lint:xml",
+				"lint:cmake",
+				"lint:cpp",
+				"check:copyright",
+				"check:uncrustify",
+				"check:cpp",
+			],
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "format:all",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"format:copyright",
+				"format:uncrustify",
+			],
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "lint:cmake",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_lint_cmake"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "lint:cpp",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_cpplint"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "lint:xml",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_xmllint"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "check:uncrustify",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_uncrustify"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "check:copyright",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_copyright"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "check:cpp",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_cppcheck"
+			],
+			"options": {
+				"cwd": "${fileDirname}",
+				"env": {
+					"AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS": "true"
+				},
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "format:copyright",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_copyright --add-missing \"$COPYRIGHT_NAME\" \"$LICENSE\""
+			],
+			"options": {
+				"cwd": "${fileDirname}",
+				"env": {
+					"COPYRIGHT_NAME": "Chair of Embedded Software (Computer Science 11) - RWTH Aachen University",
+					"LICENSE": "mit"
+				}
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+		{
+			"label": "format:uncrustify",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-c",
+				"cd $(git rev-parse --show-toplevel) && source /opt/ros/$ROS_DISTRO/setup.bash && ament_uncrustify --reformat"
+			],
+			"options": {
+				"cwd": "${fileDirname}",
+			},
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+		},
+	]
+}

@@ -1,0 +1,3 @@
+[submodule "ufil-object-tracking"]
+	path = ufil-object-tracking
+	url = git@git.rwth-aachen.de:CPM/Project/sfb-trr/software/ufil/ufil-components/ufil-object-tracking.git
