@@ -1,0 +1,96 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/ssl_1" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8300" />
+    <arg name="osc_address" value="/ssl1" />
+    <arg name="osc_message_type" value="occupancy_grid" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/ssl_2" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8310" />
+    <arg name="osc_address" value="/ssl2" />
+    <arg name="osc_message_type" value="occupancy_grid" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/ssl_1" />
+    <arg name="osc_host" value="192.168.1.78" />
+    <arg name="osc_port" value="5005" />
+    <arg name="osc_address" value="/ssl1" />
+    <arg name="osc_message_type" value="occupancy_grid" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/ssl_2" />
+    <arg name="osc_host" value="192.168.1.78" />
+    <arg name="osc_port" value="5005" />
+    <arg name="osc_address" value="/ssl2" />
+    <arg name="osc_message_type" value="occupancy_grid" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/obu/object_list" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8100" />
+    <arg name="osc_address" value="/obu" />
+    <arg name="osc_message_type" value="object_list" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/osn/object_list" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8100" />
+    <arg name="osc_address" value="/osn" />
+    <arg name="osc_message_type" value="object_list" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/ssl/object_list" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8100" />
+    <arg name="osc_address" value="/ssl" />
+    <arg name="osc_message_type" value="object_list" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+    <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/rsu/object_list" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8100" />
+    <arg name="osc_address" value="/rsu" />
+    <arg name="osc_message_type" value="object_list" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+  
+  <include file="$(find-pkg-share ufil_osc)/launch/osc.launch.xml">
+    <arg name="osc_source_topic" value="/rsu/cam/object_list" />
+    <arg name="osc_host" value="192.168.1.77" />
+    <arg name="osc_port" value="8100" />
+    <arg name="osc_address" value="/v2i" />
+    <arg name="osc_message_type" value="object_list" />  
+    <arg name="osc_use_sim_time" value="$(var osc_use_sim_time)" />
+    <arg name="osc_enable_stats" value="$(var osc_enable_stats)" />
+  </include>
+
+</launch>

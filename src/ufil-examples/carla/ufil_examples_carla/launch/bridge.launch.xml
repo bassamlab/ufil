@@ -1,0 +1,8 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+
+  <!-- Foxglove bridge -->
+  <include file="$(find-pkg-share foxglove_bridge)/launch/foxglove_bridge_launch.xml" />
+
+</launch>

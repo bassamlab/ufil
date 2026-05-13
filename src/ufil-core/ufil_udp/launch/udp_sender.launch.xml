@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="udp_sender_target_ip" default="127.0.0.1" description="Target IP address" />
+  <arg name="udp_sender_target_port" default="5000" description="Target port number" />
+  <arg name="udp_sender_input_topic" default="udp_input" description="Input topic name" />
+  <arg name="udp_sender_enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="udp_sender_use_sim_time" default="false" description="Use simulation time" />
+  <arg name="udp_sender_namespace" default="" description="Namespace for the UDP sender node." />
+  <arg name="udp_sender_node_name" default="udp_sender" description="UDP sender node name." />
+
+  <node pkg="ufil_udp" exec="udp_sender_node" name="$(var udp_sender_node_name)" namespace="$(var udp_sender_namespace)" output="screen">
+    <param name="target_ip" value="$(var udp_sender_target_ip)" />
+    <param name="target_port" value="$(var udp_sender_target_port)" />
+    <param name="enable_stats" value="$(var udp_sender_enable_stats)" />
+    <param name="use_sim_time" value="$(var udp_sender_use_sim_time)" />
+    <remap from="udp_input" to="$(var udp_sender_input_topic)" />
+  </node>
+</launch>

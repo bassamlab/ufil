@@ -1,0 +1,83 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true"
+    description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+
+  <!-- Robot State Publisher Node 1 -->
+  <node
+    pkg="robot_state_publisher"
+    exec="robot_state_publisher"
+    name="robot_state_publisher"
+    namespace="ssl"
+    output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)" />
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/utm_32n.urdf.xml')" />
+  </node>
+
+  <!-- Robot State Publisher Node 2 -->
+  <node
+    pkg="robot_state_publisher"
+    exec="robot_state_publisher"
+    name="robot_state_publisher"
+    namespace="osn"
+    output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)" />
+    <param name="robot_description" value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/intersection.urdf.xml')" />
+  </node>
+
+  <!-- Include visualization bridge -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/bridge.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/obu/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/obu/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_obu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/osn/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/osn/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_osn" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/rsu/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/rsu/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_rsu" />
+  </include>
+
+  <include file="$(find-pkg-share ufil_visualization)/launch/object_list_marker_array.launch.xml">
+    <arg name="object_list_marker_array_use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <arg name="object_list_marker_array_input_topic" value="/rsu/cam/object_list" />
+    <arg name="object_list_marker_array_output_topic" value="/rsu/cam/object_markers" />
+    <arg name="object_list_marker_array_node_name" value="object_list_marker_array_rsu_cam" />
+  </include>
+
+  <!-- Include OBU -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/obu_simulation.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="object_list_position_filter_area_of_interest" value="[-90.0,-150.0,-90.0,-110.0, -5.0,-110.0, -5.0,-150.0]" />
+  </include>
+
+  <!-- Include SSL -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/ssl_simulation.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="simulation_width" value="30.0"/>
+    <arg name="simulation_height" value="15.0"/>
+    <arg name="simulation_resolution" value="0.2"/>
+    <arg name="simulation_x" value="-41.5"/>
+    <arg name="simulation_y" value="-136.0"/>
+    <arg name="simulation_z" value="0.011"/>
+    <arg name="simulation_heading" value="180.0"/>
+  </include>
+</launch>

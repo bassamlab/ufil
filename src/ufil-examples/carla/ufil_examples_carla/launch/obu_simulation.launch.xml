@@ -1,0 +1,26 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true"
+    description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="object_list_position_filter_area_of_interest" />
+
+  <!-- Adapter launch -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/adapter.launch.xml">
+    <arg name="carla_adapter_namespace" value="obu" />
+    <arg name="carla_adapter_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="carla_adapter_enable_stats" value="$(var enable_stats)" />
+    <arg name="carla_adapter_output_topic" value="object_list_unfiltered" />
+  </include>
+
+  <!-- Filter launch -->
+  <include file="$(find-pkg-share ufil_message_filter)/launch/object_list_position_filter.launch.xml">
+    <arg name="object_list_position_filter_namespace" value="obu" />
+    <arg name="object_list_position_filter_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_position_filter_enable_stats" value="$(var enable_stats)" />
+    <arg name="object_list_position_filter_input_topic" value="object_list_unfiltered" />
+    <arg name="object_list_position_filter_output_topic" value="object_list" />
+    <arg name="object_list_position_filter_area_of_interest" value="$(var object_list_position_filter_area_of_interest)" />
+  </include>
+
+</launch>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Define arguments -->
+  <arg name="osn_tracker_input_topic" default="cloud"/>
+  <arg name="osn_tracker_output_topic" default="objects"/>
+  <arg name="osn_tracker_namespace" default="osn"/>
+  <arg name="osn_tracker_target_frame" default="map"/>
+  <arg name="osn_tracker_enable_stats" default="false"/>
+  <arg name="osn_tracker_use_sim_time" default="true"/>
+  <arg name="osn_tracker_dimension_covariance_mulitplier" default="10.0"/>
+  <arg name="osn_tracker_position_covariance_multiplier" default="0.5"/>
+  <arg name="osn_tracker_orientation_covariance_multiplier" default="0.01"/>
+  <arg name="osn_tracker_association_threshold" default="4.0"/>
+  <arg name="osn_tracker_history_length" default="10.0"/>
+  <arg name="osn_tracker_cluster_min_points" default="40"/>
+  <arg name="osn_tracker_cluster_max_points" default="50000"/>
+  <arg name="osn_tracker_cluster_tolerance" default="0.5"/>
+
+  <!-- Launch the OSN tracker node inside its namespace -->
+  <group>
+    <push-ros-namespace namespace="$(var osn_tracker_namespace)"/>
+    <node
+      pkg="ufil_osn_tracker"
+      exec="ufil_osn_tracker_node"
+      name="ufil_osn_tracker_node"
+      output="screen">
+      
+      <param name="use_sim_time" value="$(var osn_tracker_use_sim_time)"/>
+      <param name="enable_stats" value="$(var osn_tracker_enable_stats)"/>
+      <param name="target_frame" value="$(var osn_tracker_target_frame)"/>
+      <param name="dimension_covariance_mulitplier" value="$(var osn_tracker_dimension_covariance_mulitplier)"/>
+      <param name="position_covariance_multiplier" value="$(var osn_tracker_position_covariance_multiplier)"/>
+      <param name="orientation_covariance_multiplier" value="$(var osn_tracker_orientation_covariance_multiplier)"/>
+      <param name="association_threshold" value="$(var osn_tracker_association_threshold)"/>
+      <param name="history_length" value="$(var osn_tracker_history_length)"/>
+      <param name="cluster_min_points" value="$(var osn_tracker_cluster_min_points)"/>
+      <param name="cluster_max_points" value="$(var osn_tracker_cluster_max_points)"/>
+      <param name="cluster_tolerance" value="$(var osn_tracker_cluster_tolerance)"/>
+      <remap from="cloud" to="$(var osn_tracker_input_topic)"/>
+      <remap from="tracks" to="$(var osn_tracker_output_topic)"/>
+    </node>
+  </group>
+</launch>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- Declare launch arguments with default values -->
+  <arg name="cpm_lab_adapter_namespace" default="obu" />
+  <arg name="cpm_lab_adapter_vehicle_id" default="1" />
+  <arg name="cpm_lab_adapter_target_frame" default="map" />
+  <arg name="cpm_lab_adapter_output_list_topic" default="cam/object_list" />
+  <arg name="cpm_lab_adapter_enable_stats" default="false" />
+  <arg name="cpm_lab_adapter_use_sim_time" default="true" />
+
+  <!-- Launch the ufil_examples_cpm_lab_adapter_node -->
+  <node pkg="ufil_examples_cpm_lab_adapter" exec="ufil_examples_cpm_lab_adapter_node" name="ufil_examples_cpm_lab_adapter_node" namespace="$(var cpm_lab_adapter_namespace)" output="screen">
+    <param name="use_sim_time" value="$(var cpm_lab_adapter_use_sim_time)" />
+    <param name="enable_stats" value="$(var cpm_lab_adapter_enable_stats)" />
+    <param name="target_frame" value="$(var cpm_lab_adapter_target_frame)" />
+    <param name="id" value="$(var cpm_lab_adapter_vehicle_id)" />
+    <remap from="vehicle_state" to="/lab/vehicle_$(var cpm_lab_adapter_vehicle_id)/vehicleState" />
+    <remap from="object_list" to="$(var cpm_lab_adapter_output_list_topic)" />
+  </node>
+</launch>

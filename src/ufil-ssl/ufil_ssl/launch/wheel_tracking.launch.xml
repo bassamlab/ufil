@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="wheel_tracking_base_namespace" default="ssl"/>
+  <arg name="wheel_tracking_use_sim_time" default="true"/>
+  <arg name="wheel_tracking_enable_stats" default="false"/>
+  <arg name="wheel_tracking_output_topic" default="wheel_tracks"/>
+  <arg name="wheel_tracking_input_topics" default="['wheel_detection']"/>
+
+  <!-- Launch the central fusion node inside its namespace -->
+  <group>
+    <push-ros-namespace namespace="$(var wheel_tracking_base_namespace)"/>
+    <node
+      pkg="ssl_wheel_tracking"
+      exec="ssl_wheel_tracking_node"
+      name="ssl_wheel_tracking"
+      output="screen">
+      <param name="use_sim_time" value="$(var wheel_tracking_use_sim_time)" />
+      <param name="enable_stats" value="$(var wheel_tracking_enable_stats)" />
+      <param name="input_topics" value="$(var wheel_tracking_input_topics)" />
+      <remap from="wheel_tracks" to="$(var wheel_tracking_output_topic)"/>
+    </node>
+  </group>
+</launch>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- Declare launch arguments with default values -->
+  <arg name="use_sim_time" default="true" />
+  <arg name="enable_stats" default="false" />
+  <arg name="simulation_width"/>
+  <arg name="simulation_height"/>
+  <arg name="simulation_resolution"/>
+  <arg name="simulation_x"/>
+  <arg name="simulation_y"/>
+  <arg name="simulation_z"/>
+  <arg name="simulation_heading"/>
+
+  <!-- Launch the ssl_virtual_component_node -->
+  <include file="$(find-pkg-share ufil_ssl)/launch/simulation.launch.xml">
+    <arg name="simulation_base_namespace" value="ssl" />
+    <arg name="simulation_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="simulation_enable_stats" value="$(var enable_stats)" />
+    <arg name="simulation_input_topic" value="/obu/object_list"/>
+    <arg name="simulation_threshold" value="10"/>
+    <arg name="simulation_node_id" value="1"/>
+    <arg name="simulation_microscale" value="false"/>
+    <arg name="simulation_width" value="$(var simulation_width)"/>
+    <arg name="simulation_height" value="$(var simulation_height)"/>
+    <arg name="simulation_resolution" value="$(var simulation_resolution)"/>
+    <arg name="simulation_x" value="$(var simulation_x)"/>
+    <arg name="simulation_y" value="$(var simulation_y)"/>
+    <arg name="simulation_z" value="$(var simulation_z)"/>
+    <arg name="simulation_heading" value="$(var simulation_heading)"/>
+  </include>
+
+</launch>

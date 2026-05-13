@@ -1,0 +1,44 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+
+  <!-- Robot State Publisher Node -->
+  <node
+    pkg="robot_state_publisher"
+    exec="robot_state_publisher"
+    name="robot_state_publisher"
+    namespace="ssl"  
+    output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)" />
+    <param name="robot_description" value="$(command 'cat $(find-pkg-share ufil_examples_cpm_lab)/urdf/sfb_demonstrator.urdf.xml')" />
+  </node>
+
+  <!-- Wheel Detection 1 -->
+  <include file="$(find-pkg-share ufil_ssl)/launch/wheel_detection.launch.xml">
+    <arg name="wheel_detection_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="wheel_detection_input_topic" value="/ssl_1" />
+    <arg name="wheel_detection_output_topic" value="wheel_detections_1" />
+  </include>
+
+  <!-- Wheel Detection 2 -->
+  <include file="$(find-pkg-share ufil_ssl)/launch/wheel_detection.launch.xml">
+    <arg name="wheel_detection_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="wheel_detection_input_topic" value="/ssl_2" />
+    <arg name="wheel_detection_output_topic" value="wheel_detections_2" />
+  </include>
+
+  <!-- Wheel Tracking -->
+  <include file="$(find-pkg-share ufil_ssl)/launch/wheel_tracking.launch.xml">
+    <arg name="wheel_tracking_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="wheel_tracking_input_topics" value="['wheel_detections_1','wheel_detections_2']" />
+    <arg name="wheel_tracking_output_topic" value="wheel_tracks" />
+  </include>
+
+  <!-- Vehicle Detection -->
+  <include file="$(find-pkg-share ufil_ssl)/launch/vehicle_detection.launch.xml">
+    <arg name="vehicle_detection_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="vehicle_detection_input_topic" value="wheel_tracks" />
+    <arg name="vehicle_detection_output_topic" value="object_list" />
+    <arg name="vehicle_detection_vehicle_templates" value="['$(find-pkg-share ufil_examples_cpm_lab)/config/muCar_scaled_lab.json']"/>
+  </include>
+</launch>

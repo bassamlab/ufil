@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="central_fusion_base_namespace" default="rsu"/>
+  <arg name="central_fusion_use_sim_time" default="true"/>
+  <arg name="central_fusion_enable_stats" default="false"/>
+  <arg name="central_fusion_occlusion_costmap_file" default=""/>
+  <arg name="central_fusion_visible_costmap_file" default=""/>
+  <arg name="central_fusion_config_file" default="$(find-pkg-share ufil_central_fusion)/config/default.yaml"/>
+  <arg name="central_fusion_output_topic" default="object_list"/>
+
+  <!-- Launch the central fusion node inside its namespace -->
+  <group>
+    <push-ros-namespace namespace="$(var central_fusion_base_namespace)"/>
+    <node
+      pkg="ufil_central_fusion"
+      exec="central_fusion_node"
+      name="central_fusion_node"
+      output="screen">
+      <param from="$(var central_fusion_config_file)"/>
+      <param name="use_sim_time" value="$(var central_fusion_use_sim_time)" />
+      <param name="enable_stats" value="$(var central_fusion_enable_stats)" />
+      <param name="visible_costmap_file" value="$(var central_fusion_visible_costmap_file)" />
+      <param name="occluded_costmap_file" value="$(var central_fusion_occlusion_costmap_file)" />
+      <remap from="object_list" to="$(var central_fusion_output_topic)"/>
+    </node>
+  </group>
+</launch>
