@@ -1,0 +1,39 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+
+  <!-- Robot State Publisher Node -->
+  <node
+    pkg="robot_state_publisher"
+    exec="robot_state_publisher"
+    name="robot_state_publisher"
+    namespace="osn"
+    output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)" />
+    <param name="robot_description" value="$(command 'cat $(find-pkg-share ufil_examples_cpm_lab)/urdf/sfb_demonstrator.urdf.xml')" />
+  </node>
+
+  <!-- PCL Preprocessor -->
+  <include file="$(find-pkg-share ufil_osn)/launch/pcl_preprocessor.launch.xml">
+    <arg name="pcl_preprocessor_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="pcl_preprocessor_static_object_file" value="$(find-pkg-share ufil_examples_cpm_lab)/config/sfb_demonstrator.csv" />
+    <arg name="pcl_preprocessor_filter_voxel_size" value="0.1" />
+    <arg name="pcl_preprocessor_filter_z_min" value="0.4" />
+    <arg name="pcl_preprocessor_filter_min_neighbors" value="10.0" />
+    <arg name="pcl_preprocessor_filter_outlier_radius" value="0.5" />
+    <arg name="pcl_preprocessor_use_ros_time" value="true" />
+    <arg name="pcl_preprocessor_depth_buffer_decay_rate" value="0.1" />
+    <arg name="pcl_preprocessor_input_topic" value="/l515/depth/color/points" />
+    <arg name="pcl_preprocessor_output_topic" value="dynamic_cloud" />
+    <arg name="pcl_preprocessor_target_frame" value="sensor_node_base" />
+   <arg name="pcl_preprocessor_fov_num_bins" value="5"/> 
+  </include>
+
+  <!-- OSN Tracker -->
+  <include file="$(find-pkg-share ufil_osn)/launch/osn_tracker.launch.xml">
+    <arg name="osn_tracker_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="osn_tracker_input_topic" value="dynamic_cloud"/>
+    <arg name="osn_tracker_output_topic" value="object_list" />
+    <arg name="osn_tracker_target_frame" value="map" />
+  </include>
+</launch>

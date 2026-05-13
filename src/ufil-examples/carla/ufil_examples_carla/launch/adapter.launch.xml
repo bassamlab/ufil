@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- Declare launch arguments with default values -->
+  <arg name="use_sim_time" default="true" />
+  <arg name="enable_stats" default="false" />
+  <arg name="carla_adapter_namespace" default="carla" />
+  <arg name="carla_adapter_frequency_ground_truth" default="60.0" />
+  <arg name="carla_adapter_frequency_imu" default="50.0" />
+  <arg name="carla_adapter_frequency_gnss" default="5.0" />
+  <arg name="carla_adapter_frequency_odometry" default="50.0" />
+  <arg name="carla_adapter_n_vehicles" default="-1" />
+  <arg name="carla_adapter_vehicle_ids" default="[9]" />
+  <arg name="carla_adapter_output_topic" default="false" />
+
+  <!-- Launch the ufil_examples_carla_adapter_node -->
+  <node pkg="ufil_examples_carla_adapter" exec="ufil_examples_carla_adapter_node"
+    name="ufil_examples_carla_adapter_node" namespace="$(var carla_adapter_namespace)"
+    output="screen">
+    <param name="use_sim_time" value="$(var carla_adapter_use_sim_time)" />
+    <param name="enable_stats" value="$(var carla_adapter_enable_stats)" />
+    <param name="frequency_ground_truth" value="$(var carla_adapter_frequency_ground_truth)" />
+    <param name="frequency_imu" value="$(var carla_adapter_frequency_imu)" />
+    <param name="frequency_gnss" value="$(var carla_adapter_frequency_gnss)" />
+    <param name="frequency_odometry" value="$(var carla_adapter_frequency_odometry)" />
+    <param name="n_vehicles" value="$(var carla_adapter_n_vehicles)" />
+    <param name="vehicle_ids" value="$(var carla_adapter_vehicle_ids)" />
+    <remap from="object_list" to="$(var carla_adapter_output_topic)" />
+  </node>
+</launch>

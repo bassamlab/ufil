@@ -1,0 +1,114 @@
+<launch>
+  <!-- Declare launch arguments -->
+  <arg name="use_sim_time" default="true"
+    description="Flag indicating that a recorded file is used." />
+  <arg name="enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="obu_target_ip" default="127.0.0.1" description="Target IP of RSU." />
+  <arg
+    name="object_list_position_filter_area_of_interest"
+    description="Area of interest configuration. See ufil_message_filter package for more information on the format."
+  />
+
+  <!-- Adapter launch -->
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/adapter.launch.xml">
+    <arg name="carla_adapter_namespace" value="obu" />
+    <arg name="carla_adapter_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="carla_adapter_enable_stats" value="$(var enable_stats)" />
+    <arg name="carla_adapter_output_topic" value="object_list_unfiltered" />
+  </include>
+
+  <!-- Filter launch -->
+  <include file="$(find-pkg-share ufil_message_filter)/launch/object_list_position_filter.launch.xml">
+    <arg name="object_list_position_filter_namespace" value="obu" />
+    <arg name="object_list_position_filter_use_sim_time" value="$(var use_sim_time)" />
+    <arg name="object_list_position_filter_enable_stats" value="$(var enable_stats)" />
+    <arg name="object_list_position_filter_input_topic" value="object_list_unfiltered" />
+    <arg name="object_list_position_filter_output_topic" value="object_list" />
+    <arg name="object_list_position_filter_area_of_interest" value="$(var object_list_position_filter_area_of_interest)" />
+  </include>
+
+  <!-- OBU 0 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_0" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="0" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+  <!-- OBU 1 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_1" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="1" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+  <!-- OBU 2 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_2" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="2" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+  <!-- OBU 3 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_3" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="3" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <!-- OBU 4 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_4" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="4" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <!-- OBU 5 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_5" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="5" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+    <!-- OBU 6 launch -->
+  <include file="$(find-pkg-share ufil_obu)/launch/default.launch.py">
+    <arg name="base_namespace" value="obu_6" />
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="enable_stats" value="$(var enable_stats)" />
+    <arg name="cam_time_shift_nanosec" value="1104537600000000000" />
+    <arg name="input_topic" value="/obu/object_list" />
+    <arg name="obu_target_frame" value="utm_32n" />
+    <arg name="object_array_index" value="6" />
+    <arg name="target_ip" value="$(var obu_target_ip)" />
+  </include>
+
+</launch>

@@ -1,0 +1,29 @@
+/**:
+  ros__parameters:
+    num_sensors: 2
+
+    #                        extr  cartr   trucktr mototr pedtr bictr  stattr  othtr topic
+    sensor_1_configuration: ["0.7", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "/pole/tracks"]
+
+    sensor_2_configuration: ["0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "0.8", "/rsu/cam/objects"]
+    min_existence_weight: "0.2"
+
+    max_existence_weight: "0.8"
+
+    existence_decay_factor: "0.01"
+
+    delta_d: "0.1"
+
+    alpha: "0.95"
+
+    p_min: "0.1"
+
+    p_ref: "0.5"
+
+    p_max: "0.9"
+
+    association_threshold: "4.0"
+
+    timer_period_ms: 30
+
+    buffer_time: "2.0"

@@ -1,0 +1,15 @@
+<launch>
+  <arg name="object_list_marker_array_use_sim_time" default="true" description="Use simulated time." />
+  <arg name="object_list_marker_array_namespace" default="" description="Namespace for the marker array node." />
+  <arg name="object_list_marker_array_input_topic" default="objects" description="Input ufil_msgs/ObjectList topic." />
+  <arg name="object_list_marker_array_output_topic" default="object_markers" description="Output visualization topic for MarkerArray." />
+  <arg name="object_list_marker_array_config_file" default="$(find-pkg-share ufil_visualization)/config/object_list_marker_array.yaml" description="Path to the parameter file." />
+  <arg name="object_list_marker_array_node_name" default="object_list_marker_array_node" description="Node name." />
+
+  <node pkg="ufil_visualization" exec="object_list_marker_array_node" name="$(var object_list_marker_array_node_name)" namespace="$(var object_list_marker_array_namespace)" output="screen">
+    <param name="use_sim_time" value="$(var object_list_marker_array_use_sim_time)" />
+    <param name="input_topic" value="$(var object_list_marker_array_input_topic)" />
+    <param name="output_topic" value="$(var object_list_marker_array_output_topic)" />
+    <param from="$(var object_list_marker_array_config_file)" />
+  </node>
+</launch>

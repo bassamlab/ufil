@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot name="carla-highway-v2">
+  <link name="map"></link>
+  <link name="sensor_node_base"></link>
+  <link name="sensor_node"></link>
+  <link name="lidar"></link>
+  <link name="aoi1"></link>
+  <link name="aoi2"></link>
+  <link name="aoi3"></link>
+  <link name="aoi4"></link>
+
+  <joint name="map_to_sensor_node_base" type="fixed">
+    <parent link="map" />
+    <child link="sensor_node_base" />
+    <origin xyz="219.0 70.0 0" rpy="0 0 3.14159" />
+  </joint>
+
+  <joint name="sensor_node_base_to_sensor_node" type="fixed">
+    <parent link="sensor_node_base"/>
+    <child link="sensor_node"/>
+    <origin xyz="0 0 6.5" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="sensor_node_to_lidar" type="fixed">
+    <parent link="sensor_node"/>
+    <child link="lidar"/>
+    <origin xyz="0 0 0" rpy="3.14159 0.43999994788763186 0.8416"/>
+  </joint>
+
+  <joint name="map_to_aoi1" type="fixed">
+    <parent link="map" /><child link="aoi1" />
+    <origin xyz="201.0 -1.5 0.0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="map_to_aoi2" type="fixed">
+    <parent link="map" /><child link="aoi2" />
+    <origin xyz="201.0 79.5 0.0" rpy="0 0 -1.5708" />
+  </joint>
+
+  <joint name="map_to_aoi3" type="fixed">
+    <parent link="map" /><child link="aoi3" />
+    <origin xyz="217.0 79.5 0.0" rpy="0 0 3.1416" />
+  </joint>
+
+  <joint name="map_to_aoi4" type="fixed">
+    <parent link="map" /><child link="aoi4" />
+    <origin xyz="217.0 -1.5 0.0" rpy="0 0 1.5708" />
+  </joint>
+</robot>

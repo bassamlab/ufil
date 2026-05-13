@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="mqtt_use_sim_time" default="false" description="Use simulation time" />
+  <arg name="mqtt_namespace" default="" description="Namespace for the MQTT converter node." />
+  <arg name="mqtt_node_name" default="mqtt_message_converter_node" description="MQTT converter node name." />
+  <arg name="mqtt_enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="mqtt_protocol" default="tcp" description="MQTT mqtt_protocol (e.g., tcp, ssl)" />
+  <arg name="mqtt_host" default="localhost" description="MQTT broker mqtt_host" />
+  <arg name="mqtt_port" default="1883" description="MQTT broker mqtt_port" />
+  <arg name="mqtt_id" default="mqtt_message_converter_node" description="MQTT client ID" />
+  <arg name="mqtt_source_topic" default="/lab/groundtruth" description="ROS topic to subscribe" />
+  <arg name="mqtt_topic" default="test" description="MQTT topic to publish" />
+  <arg name="mqtt_message_type" default="object_list"
+       description="Message type: object_list or occupancy_grid" />
+
+  <node
+      pkg="ufil_mqtt"
+      exec="mqtt_message_converter_node"
+      name="$(var mqtt_node_name)"
+      namespace="$(var mqtt_namespace)"
+      output="screen">
+
+    <param name="use_sim_time" value="$(var mqtt_use_sim_time)" />
+    <param name="mqtt_protocol" value="$(var mqtt_protocol)" />
+    <param name="mqtt_host" value="$(var mqtt_host)" />
+    <param name="mqtt_port" value="$(var mqtt_port)" />
+    <param name="mqtt_id" value="$(var mqtt_id)" />
+    <param name="mqtt_source_topic" value="$(var mqtt_source_topic)" />
+    <param name="mqtt_topic" value="$(var mqtt_topic)" />
+    <param name="mqtt_message_type" value="$(var mqtt_message_type)" />
+
+  </node>
+</launch>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="cam_namespace" default="obu" description="Namespace of this node" />
+
+  <arg name="cam_target_ip" default="127.0.0.1" description="Target IP address" />
+  <arg name="cam_target_port" default="5000" description="Target port number" />
+  <arg name="cam_input_topic" default="object" description="Input object topic name" />
+  <arg name="cam_enable_stats" default="false" description="Enable packet forwarding statistics" />
+  <arg name="cam_time_shift_nanosec" default="0" description="Time Shift for cam messages as they need to start at 2004" />
+  <arg name="cam_use_sim_time" default="true" description="Flag indicating that a recorded file is used." />
+  <arg name="cam_target_frame" default="utm_32n" description="target_frame of transform" />
+  <arg name="cam_object_array_index" default="0" description="Selects a specific element from the object array." />
+
+  <group>
+    <push-ros-namespace namespace="$(var cam_namespace)"/>
+    <include file="$(find-pkg-share ufil_etsi)/launch/vehicle_cam_generation.launch.xml">
+      <arg name="vehicle_cam_generator_input_topic" value="$(var cam_input_topic)" />
+      <arg name="vehicle_cam_generator_output_topic" value="cam" />
+      <arg name="vehicle_cam_generator_enable_stats" value="$(var cam_enable_stats)" />
+      <arg name="vehicle_cam_generator_time_shift_nanosec" value="$(var cam_time_shift_nanosec)" />
+      <arg name="vehicle_cam_generator_use_sim_time" value="$(var cam_use_sim_time)" />
+      <arg name="vehicle_cam_generator_target_frame" value="$(var cam_target_frame)" />
+      <arg name="vehicle_cam_generator_object_array_index" value="$(var cam_object_array_index)" />
+    </include>
+
+    <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node" name="etsi_its_conversion_node" output="screen">
+      <param name="udp2ros_etsi_types" value="['']" />
+      <param name="ros2udp_etsi_types" value="['cam']" />
+      <param name="has_btp_destination_port" value="true" />
+      <param name="btp_destination_port_offset" value="0" />
+      <param name="etsi_message_payload_offset" value="4" />
+      <param name="use_sim_time" value="$(var cam_use_sim_time)" />
+      <remap from="etsi_its_conversion_node/cam/in" to="cam" />
+      <remap from="etsi_its_conversion_node/udp/out" to="udp" />
+    </node>
+
+    <include file="$(find-pkg-share ufil_udp)/launch/udp_sender.launch.xml">
+      <arg name="udp_sender_input_topic" value="udp" />
+      <arg name="udp_sender_target_ip" value="$(var cam_target_ip)" />
+      <arg name="udp_sender_target_port" value="$(var cam_target_port)" />
+      <arg name="udp_sender_enable_stats" value="$(var cam_enable_stats)" />
+      <arg name="udp_sender_use_sim_time" value="$(var cam_use_sim_time)" />
+    </include>
+  </group>
+</launch>

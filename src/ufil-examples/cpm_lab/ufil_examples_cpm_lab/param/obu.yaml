@@ -1,0 +1,99 @@
+/**:
+  # Robot Localization
+  ekf_filter_node_odom:
+    ros__parameters:
+      frequency: 50.0
+      sensor_timeout: 0.1 # Any sensor needs to be at least 1/0.1 = 10Hz
+      two_d_mode: true
+      transform_time_offset: 0.0
+      transform_timeout: 0.0
+      print_diagnostics: false
+      debug: false
+
+      odom0: odometry/wheel # Only use velocity in all directions
+      odom0_config: [ false, false, false, # X,Y,Z
+                      false, false, false, # roll,pitch,yaw
+                      true,  true,  true, # X˙,Y˙,Z˙
+                      false, false, false, # roll˙,pitch˙,yaw˙
+                      false, false, false ] # X¨,Y¨,Z¨
+      odom0_queue_size: 10
+      odom0_differential: false
+      odom0_relative: false
+
+      imu0: imu
+      imu0_config: [ false, false, false, # X,Y,Z
+                     true,  true,  true, # roll,pitch,yaw
+                     false, false, false, # X˙,Y˙,Z˙
+                     true,  true,  true, # roll˙,pitch˙,yaw˙
+                     true,  true,  true ] # X¨,Y¨,Z¨
+      imu0_differential: false
+      imu0_relative: false
+      imu0_queue_size: 10
+      imu0_remove_gravitational_acceleration: false # Lab adapter sends 0 in z-direction
+
+      use_control: false
+      #Initial State of Vehicle 1 in Lab
+      #initial_state: [ 3.15,  3.8,  0.0,
+      #                 0.0,  0.0,  0.0,
+      #                 0.0,  0.0,  0.0,
+      #                 0.0,  0.0,  0.0,
+      #                 0.0,  0.0,  0.0 ]
+
+  ekf_filter_node_map:
+    ros__parameters:
+      frequency: 50.0
+      sensor_timeout: 0.4 # Any sensor needs to be at least 1/0.4 = 2.5Hz
+      two_d_mode: true
+      transform_time_offset: 0.0
+      transform_timeout: 0.0
+      print_diagnostics: false
+      debug: false
+
+      odom0: odometry/wheel
+      odom0_config: [ false, false, false, # X,Y,Z
+                      false, false, false, # roll,pitch,yaw
+                      true,  true,  true, # X˙,Y˙,Z˙
+                      false, false, true, # roll˙,pitch˙,yaw˙
+                      false, false, false ] # X¨,Y¨,Z¨
+      odom0_queue_size: 10
+      odom0_differential: false
+      odom0_relative: false
+
+      odom1: odometry/gps # Only use position from GPS
+      odom1_config: [ true,  true,  true, # X,Y,Z
+                      false, false, false, # roll,pitch,yaw
+                      false, false, false, # X˙,Y˙,Z˙
+                      false, false, false, # roll˙,pitch˙,yaw˙
+                      false, false, false ] # X¨,Y¨,Z¨
+      odom1_queue_size: 10
+      odom1_differential: false
+      odom1_relative: false
+
+      imu0: imu
+      imu0_config: [ false, false, false, # X,Y,Z
+                     true,  true,  true, # roll,pitch,yaw
+                     false, false, false, # X˙,Y˙,Z˙
+                     true,  true,  true, # roll˙,pitch˙,yaw˙
+                     true,  true,  true ] # X¨,Y¨,Z¨
+      imu0_differential: false
+      imu0_relative: false
+      imu0_queue_size: 10
+      imu0_remove_gravitational_acceleration: false # Lab adapter sends 0 in z-direction
+
+      use_control: false
+      publish_acceleration: true
+
+  navsat_transform_node:
+    ros__parameters:
+      frequency: 5.0
+      delay: 3.0
+      magnetic_declination_radians: 0.0  # We have simulated east / north, no declination
+      yaw_offset: -0.03424  # IMU reads 0 facing east, but we need to offset meridian convergence, since it is being added because we use UTM (since local cartesian is bugged)
+      zero_altitude: true
+      publish_filtered_gps: true
+      broadcast_cartesian_transform: false
+      use_odometry_yaw: false
+      wait_for_datum: true
+      transform_timeout: 0.0
+      datum: [ 48.079772, 11.635735, 0.0 ] # Lab Coordinates
+      use_local_cartesian: false # Seems to be bugged
