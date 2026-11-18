@@ -1,0 +1,52 @@
+# Default parameters of ufil_visualization::ObjectListMarkerArrayNode. All parameters are
+# read-only. Colours are [r, g, b, a] in [0, 1]; sizes are in metres.
+#
+# Every element of an object (body, velocity, body_axis_x/y/z, covariance_position,
+# covariance_orientation, label) is published in its own marker namespace, so the viewer can
+# hide each element separately. All elements of one source share one colour, which identifies
+# the source of the object list.
+#
+# One node can visualize several object lists ("sources"), each on its own output topic:
+#
+#   sources: [osn, obu]
+#   osn:
+#     input_topic: /osn/object_list      # default: <source>/object_list
+#     output_topic: /osn/object_markers  # default: <source>/object_markers
+#     color: [0.208, 0.518, 0.894, 1.0]  # default: color
+#
+# config/ufil_sources.yaml configures the sources of the UFIL examples. Without sources (the
+# default), the node visualizes object_list on object_markers with color.
+/**:
+  ros__parameters:
+    # Markers disappear after this many seconds without a new object list (0: never).
+    marker_lifetime: 1.0
+
+    # Default colour of the sources: neutral grey.
+    color: [0.604, 0.600, 0.588, 1.0]
+
+    body:
+      # Opacity of the box relative to the alpha of color.
+      alpha: 0.5
+
+    velocity:
+      shaft_diameter: 0.1
+      head_diameter: 0.15
+      head_length: 0.2
+
+    body_axes:
+      shaft_diameter: 0.1
+      head_diameter: 0.15
+      head_length: 0.2
+
+    covariance:
+      # Two-sigma ellipse of the position and, above the object, an ellipse that grows with the
+      # yaw uncertainty.
+      line_width: 0.05
+      ellipse_segments: 64
+
+    # Label "<class> #<id>  ∃<existence probability>%" above the object, e.g. "🚶 #42  ∃93%".
+    label:
+      # Same height as the lanelet ids.
+      text_size: 0.8
+      # Show the most likely class as an icon (emoji); false: its name, e.g. "PEDESTRIAN".
+      icons: true

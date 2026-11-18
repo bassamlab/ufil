@@ -1,0 +1,29 @@
+{
+  "length": 4.791779518127441,
+  "width": 2.163450002670288,
+  "classification": 0,
+  "axles": [
+    {
+      "single_track": false,
+      "track_width": 2.163450002670288,
+      "track_width_variance": 1e-9,
+      "center_to_axle": 2.39588975906,
+      "center_to_axle_variance": 1e-9,
+      "wheel_detected": [
+        true,
+        true
+      ]
+    },
+    {
+      "single_track": false,
+      "track_width": 2.163450002670288,
+      "track_width_variance": 1e-9,
+      "center_to_axle": -2.39588975906,
+      "center_to_axle_variance": 1e-9,
+      "wheel_detected": [
+        true,
+        true
+      ]
+    }
+  ]
+}

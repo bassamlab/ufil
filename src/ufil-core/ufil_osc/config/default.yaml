@@ -1,0 +1,16 @@
+# Default parameters of ufil_osc::OscMessageConverterNode. All parameters are read-only.
+# The input topic is "input"; remap it to the forwarded topic.
+/**:
+  ros__parameters:
+    # object_list (ufil_msgs/msg/ObjectList) or occupancy_grid (nav_msgs/msg/OccupancyGrid).
+    message_type: object_list
+
+    receiver:
+      host: 127.0.0.1
+      port: 9000
+
+    osc_address: /objects
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

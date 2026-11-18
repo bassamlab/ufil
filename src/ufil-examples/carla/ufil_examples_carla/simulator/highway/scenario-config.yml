@@ -1,0 +1,14 @@
+area_of_interest: [200.5, -110.0, 217.5, 70.0]  # min_x, min_y, max_x, max_y
+
+custom_spawns:
+  - {x: 211.039368, y: 60.0, z: 0.6, yaw: -90}
+  - {x: 207.570908, y: 57.0, z: 0.6, yaw: -90}
+  - {x: 204.039856, y: 60.0, z: 0.6, yaw: -90}
+
+player_spawn:
+  x: 245.0
+  y: -90.0
+  z: 60.0
+  pitch: -52.5
+  yaw: -218.5
+  roll: 0

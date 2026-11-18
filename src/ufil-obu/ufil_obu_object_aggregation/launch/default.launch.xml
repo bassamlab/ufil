@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_obu_object_aggregation)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="accel_topic" default="accel" description="Filtered acceleration."/>
+  <arg name="odometry_topic" default="odometry" description="Filtered odometry."/>
+  <arg name="gnss_topic" default="nav_sat_fix" description="GNSS fix."/>
+  <arg name="output_topic" default="object" description="Published own vehicle object."/>
+
+  <node pkg="ufil_obu_object_aggregation" exec="object_aggregation_node"
+    name="object_aggregation" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_obu_object_aggregation)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="accel" to="$(var accel_topic)"/>
+    <remap from="odometry" to="$(var odometry_topic)"/>
+    <remap from="nav_sat_fix" to="$(var gnss_topic)"/>
+    <remap from="object" to="$(var output_topic)"/>
+  </node>
+</launch>

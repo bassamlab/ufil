@@ -1,0 +1,51 @@
+# Default parameters of ufil_visualization::LaneletMapMarkerArrayNode. All parameters are
+# read-only. Colours are [r, g, b, a] in [0, 1]; heights (z) and sizes are in metres.
+/**:
+  ros__parameters:
+    # Lanelet2 OSM map; empty publishes no map. Set it in the launch file (map_path argument).
+    map_path: ""
+    frame_id: map
+
+    # Lanelet borders, lanelet separators and road markings.
+    line_width: 0.1
+
+    # The palette mimics a dark map style.
+    lanelet:
+      fill_color: [0.290, 0.290, 0.306, 1.0]
+      fill_z: -0.10
+      border_color: [0.408, 0.408, 0.427, 1.0]
+      border_z: -0.05
+      # Drawn where a lanelet ends and its successor starts.
+      separator_color: [0.039, 0.518, 1.0, 1.0]
+      separator_z: 0.1
+
+    lanelet_ids:
+      show: true
+      color: [0.922, 0.922, 0.961, 0.8]
+      text_size: 0.8
+      z: 0.2
+
+    # Solid line_thin / line_thick line strings and stop lines.
+    road_marking:
+      color: [0.851, 0.851, 0.863, 1.0]
+      z: 0.05
+      stop_line_width: 0.4
+
+    crosswalk:
+      fill_color: [0.251, 0.251, 0.267, 1.0]
+      fill_z: -0.08
+      stripe_color: [0.851, 0.851, 0.863, 1.0]
+      stripe_z: 0.0
+      stripe_width: 0.5
+      stripe_gap: 0.5
+
+    # Areas, coloured by their Lanelet2 subtype.
+    area:
+      z: -0.15
+      default_color: [0.141, 0.141, 0.149, 1.0]
+      walkway_color: [0.220, 0.220, 0.231, 1.0]
+      vegetation_color: [0.153, 0.243, 0.180, 1.0]
+      parking_color: [0.200, 0.200, 0.216, 1.0]
+      keepout_color: [0.302, 0.141, 0.149, 1.0]
+      building_color: [0.235, 0.235, 0.251, 1.0]
+      traffic_island_color: [0.196, 0.247, 0.208, 1.0]

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+  Simulated sensors of the CARLA highway example, recorded for the evaluation: ground-truth
+  objects of the simulator and a virtual sensitive surface layer mat fed with them.
+  All parameters are in config/carla-highway.yaml.
+-->
+<launch>
+  <arg name="use_sim_time" default="true"
+    description="Use the /clock topic of the CARLA ROS bridge."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_carla)/config/carla-highway.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file" default="$(var params_file)"
+    description="Machine-specific overrides of params_file."/>
+
+  <set_parameter name="use_sim_time" value="$(var use_sim_time)"/>
+
+  <!-- Frames of the outdoor sensor node and the sensitive surface layer -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="ssl" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/utm_32n.urdf.xml')"/>
+  </node>
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="osn" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/highway.urdf.xml')"/>
+  </node>
+
+  <!-- Visualization -->
+  <node pkg="ufil_visualization" exec="object_list_marker_array_node"
+    name="object_list_marker_array" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/object_list.yaml"/>
+    <param from="$(find-pkg-share ufil_visualization)/config/ufil_sources.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+  </node>
+
+  <!-- All simulator objects in /obu, limited to the area of interest -->
+  <node pkg="ufil_examples_carla_adapter" exec="ufil_examples_carla_adapter_node"
+    name="carla_adapter" namespace="obu" output="screen">
+    <param from="$(find-pkg-share ufil_examples_carla_adapter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/carla/objects"/>
+    <remap from="actor_list" to="/carla/actor_list"/>
+    <remap from="object_list" to="object_list_unfiltered"/>
+  </node>
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="object_list_unfiltered"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+
+  <!-- Virtual sensitive surface layer mat, publishes /ssl/ssl_1/map -->
+  <node pkg="ssl_simulator" exec="ssl_simulator_node"
+    name="ssl_simulator" namespace="ssl" output="screen">
+    <param from="$(find-pkg-share ssl_simulator)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object_list" to="/obu/object_list"/>
+  </node>
+</launch>

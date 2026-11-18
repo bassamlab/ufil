@@ -1,0 +1,12 @@
+# Default parameters of ufil_etsi::RsuCamGeneratorNode. All parameters are read-only.
+/**:
+  ros__parameters:
+    # ITS station id, -1 chooses a random id at start-up.
+    station_id: -1
+    # Position of the road side unit (WGS84). Deployment specific; the default is the CPM lab.
+    position:
+      latitude: 48.079772
+      longitude: 11.635735
+      altitude: 0.0
+    # Shift of the ROS time for the ETSI timestamps [ns], same value as on the receivers.
+    time_shift_nanosec: 0

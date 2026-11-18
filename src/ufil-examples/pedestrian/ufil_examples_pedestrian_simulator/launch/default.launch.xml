@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_pedestrian_simulator)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="scenario" default="crossing.yaml"
+    description="Scenario file: an absolute path or a file name in the config directory of ufil_examples_pedestrian_simulator (appearing.yaml, clutter.yaml, crossing.yaml, crowd.yaml, group.yaml, occlusion.yaml, overtaking.yaml, parallel.yaml, passing.yaml, waiting.yaml)."/>
+  <arg name="namespace" default="ufil_examples_pedestrian" description="Namespace of the node."/>
+  <arg name="measured_topic" default="measured_objects"
+    description="Published noisy detections including clutter."/>
+  <arg name="reference_topic" default="reference_objects"
+    description="Published ground truth of the agents."/>
+
+  <node pkg="ufil_examples_pedestrian_simulator" exec="ufil_examples_pedestrian_simulator_node"
+    name="pedestrian_simulator" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_examples_pedestrian_simulator)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="scenario_file" value="$(var scenario)"/>
+    <remap from="measured_objects" to="$(var measured_topic)"/>
+    <remap from="reference_objects" to="$(var reference_topic)"/>
+  </node>
+</launch>

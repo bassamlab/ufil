@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+  Pedestrian example on a single machine: head (visualization) and headless (simulator, tracker).
+  There are no machine-specific values, so local_params_file defaults to params_file.
+-->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_pedestrian)/config/pedestrian.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file" default="$(var params_file)"
+    description="Single-machine overrides of params_file."/>
+  <arg name="scenario" default="crossing.yaml"
+    description="Scenario file name in the config directory of ufil_examples_pedestrian_simulator (appearing.yaml, clutter.yaml, crossing.yaml, crowd.yaml, group.yaml, occlusion.yaml, overtaking.yaml, parallel.yaml, passing.yaml, waiting.yaml) or an absolute path."/>
+
+  <include file="$(find-pkg-share ufil_examples_pedestrian)/launch/pedestrian_head.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="local_params_file" value="$(var local_params_file)"/>
+  </include>
+  <include file="$(find-pkg-share ufil_examples_pedestrian)/launch/pedestrian_headless.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="local_params_file" value="$(var local_params_file)"/>
+    <arg name="scenario" value="$(var scenario)"/>
+  </include>
+</launch>

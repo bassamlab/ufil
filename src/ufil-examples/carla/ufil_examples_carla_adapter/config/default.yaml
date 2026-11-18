@@ -1,0 +1,16 @@
+# Default parameters of ufil_examples_carla_adapter::CarlaAdapterNode. All parameters are
+# read-only.
+/**:
+  ros__parameters:
+    # Frame of the published object lists.
+    target_frame: map
+
+    cooperative_vehicles:
+      # Publish every simulator object. To publish only cooperative vehicles (CARLA role name
+      # "vehicle_<id>"), set enabled to true and list their IDs:
+      #   ids: [1, 2, 3]
+      enabled: false
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

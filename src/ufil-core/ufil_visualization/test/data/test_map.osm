@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="ufil_visualization test">
+  <node id="1" lat="50.000000000" lon="9.000000000">
+    <tag k="origin" v="true"/>
+  </node>
+  <node id="11" lat="50.000031467" lon="9.000000000"/>
+  <node id="12" lat="50.000031467" lon="9.000139478"/>
+  <node id="13" lat="50.000031467" lon="9.000278956"/>
+  <node id="21" lat="50.000000000" lon="9.000000000"/>
+  <node id="22" lat="50.000000000" lon="9.000139478"/>
+  <node id="23" lat="50.000000000" lon="9.000278956"/>
+  <node id="31" lat="49.999988762" lon="9.000306852"/>
+  <node id="32" lat="50.000042705" lon="9.000306852"/>
+  <node id="41" lat="49.999988762" lon="9.000348696"/>
+  <node id="42" lat="50.000042705" lon="9.000348696"/>
+  <node id="51" lat="50.000000000" lon="9.000265009"/>
+  <node id="52" lat="50.000031467" lon="9.000265009"/>
+  <node id="61" lat="49.999955048" lon="9.000000000"/>
+  <node id="62" lat="49.999955048" lon="9.000139478"/>
+  <node id="63" lat="49.999910095" lon="9.000139478"/>
+  <node id="64" lat="49.999910095" lon="9.000000000"/>
+  <way id="101">
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="dashed"/>
+  </way>
+  <way id="102">
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="dashed"/>
+  </way>
+  <way id="103">
+    <nd ref="21"/>
+    <nd ref="22"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="104">
+    <nd ref="22"/>
+    <nd ref="23"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="solid"/>
+  </way>
+  <way id="105">
+    <nd ref="31"/>
+    <nd ref="32"/>
+    <tag k="type" v="zebra_marking"/>
+  </way>
+  <way id="106">
+    <nd ref="41"/>
+    <nd ref="42"/>
+    <tag k="type" v="zebra_marking"/>
+  </way>
+  <way id="107">
+    <nd ref="51"/>
+    <nd ref="52"/>
+    <tag k="type" v="stop_line"/>
+  </way>
+  <way id="108">
+    <nd ref="61"/>
+    <nd ref="62"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="dashed"/>
+  </way>
+  <way id="109">
+    <nd ref="62"/>
+    <nd ref="63"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="dashed"/>
+  </way>
+  <way id="110">
+    <nd ref="63"/>
+    <nd ref="64"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="dashed"/>
+  </way>
+  <way id="111">
+    <nd ref="64"/>
+    <nd ref="61"/>
+    <tag k="type" v="line_thin"/>
+    <tag k="subtype" v="dashed"/>
+  </way>
+  <relation id="201">
+    <member type="way" role="left" ref="101"/>
+    <member type="way" role="right" ref="103"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="location" v="urban"/>
+  </relation>
+  <relation id="202">
+    <member type="way" role="left" ref="102"/>
+    <member type="way" role="right" ref="104"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="road"/>
+    <tag k="location" v="urban"/>
+  </relation>
+  <relation id="203">
+    <member type="way" role="left" ref="105"/>
+    <member type="way" role="right" ref="106"/>
+    <tag k="type" v="lanelet"/>
+    <tag k="subtype" v="crosswalk"/>
+    <tag k="location" v="urban"/>
+  </relation>
+  <relation id="301">
+    <member type="way" role="outer" ref="108"/>
+    <member type="way" role="outer" ref="109"/>
+    <member type="way" role="outer" ref="110"/>
+    <member type="way" role="outer" ref="111"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="subtype" v="vegetation"/>
+  </relation>
+</osm>

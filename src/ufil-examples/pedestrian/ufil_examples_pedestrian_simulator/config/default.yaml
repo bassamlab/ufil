@@ -1,0 +1,14 @@
+# Default parameters of ufil_examples_pedestrian_simulator::PedestrianSimulatorNode. All
+# parameters are read-only. The other files in this directory are scenario files.
+/**:
+  ros__parameters:
+    # Absolute path, or a file name in this directory.
+    scenario_file: crossing.yaml
+    # Simulation step and publication period [s].
+    timestep: 0.1
+    # Frame of the published objects.
+    frame_id: map
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

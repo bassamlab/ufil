@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ufil_udp</name>
+  <version>0.2.0</version>
+  <description>
+    Bridge between ROS 2 and UDP. Provides a ROS-independent core library that receives and sends
+    UDP datagrams, and the ROS 2 components ufil_udp::UdpReceiverNode (publishes the datagrams
+    received on a port as udp_msgs/UdpPacket) and ufil_udp::UdpSenderNode (sends the payload of
+    udp_msgs/UdpPacket messages to a fixed target), e.g. to exchange ETSI ITS messages.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+
+  <!-- Core library -->
+  <depend>boost</depend>
+
+  <!-- ROS 2 components -->
+  <depend>diagnostic_msgs</depend>
+  <depend>diagnostic_updater</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>udp_msgs</depend>
+
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_xml</exec_depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>class_loader</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

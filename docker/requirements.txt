@@ -1,0 +1,20 @@
+# Top-level Python dependencies of the runtime image.
+# Exact versions live in constraints.txt; regenerate it with ./update-python-lock.sh.
+# torch/torchvision are installed separately from the CPU-only PyTorch index (see Dockerfile).
+# h5py and scipy are installed from apt (see Dockerfile): h5py is a rosdep key (python3-h5py),
+# scipy is used by the scripts in evaluation/ like matplotlib, pandas, pyyaml, scikit-learn and
+# seaborn. casadi is kept for planned work.
+
+# Keep Debian's numpy 1.x: pip can't uninstall it, and ROS Jazzy is built against it
+numpy<2
+# Keep Debian's setuptools: >=72 drops `tests_require`, so colcon no longer detects
+# pytest for ament_python packages and runs (empty) unittest instead
+setuptools<72
+
+casadi
+matplotlib
+pandas
+pyyaml
+scikit-learn
+seaborn
+ultralytics

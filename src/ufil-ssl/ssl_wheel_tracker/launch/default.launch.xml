@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ssl_wheel_tracker)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="ssl" description="Namespace of the node."/>
+  <arg name="output_topic" default="wheel_tracks" description="Published wheel tracks."/>
+
+  <node pkg="ssl_wheel_tracker" exec="ssl_wheel_tracker_node" name="ssl_wheel_tracker"
+    namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ssl_wheel_tracker)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="wheel_tracks" to="$(var output_topic)"/>
+  </node>
+</launch>

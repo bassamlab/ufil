@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_osn_tracker)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="input_topic" default="dynamic_cloud" description="Dynamic point cloud to track."/>
+  <arg name="output_topic" default="object_list" description="Published object list."/>
+
+  <node pkg="ufil_osn_tracker" exec="ufil_osn_tracker_node"
+    name="ufil_osn_tracker" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_osn_tracker)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="dynamic_cloud" to="$(var input_topic)"/>
+    <remap from="object_list" to="$(var output_topic)"/>
+  </node>
+</launch>

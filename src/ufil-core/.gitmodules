@@ -1,0 +1,3 @@
+[submodule "ufil-object-tracking"]
+	path = ufil-object-tracking
+	url = ssh://git@git.unibw.de:2222/cas/project/simon/software/ufil/ufil-components/ufil-object-tracking.git

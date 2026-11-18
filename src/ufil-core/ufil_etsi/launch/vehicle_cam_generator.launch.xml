@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Generates the CAMs of a vehicle from its UFIL object. -->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="node_name" default="vehicle_cam_generator_node" description="Name of the node."/>
+  <arg name="input_topic" default="object" description="Object lists containing the own vehicle."/>
+  <arg name="output_topic" default="cam" description="Generated CAMs."/>
+
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node" name="$(var node_name)"
+    namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="object" to="$(var input_topic)"/>
+    <remap from="cam" to="$(var output_topic)"/>
+  </node>
+</launch>

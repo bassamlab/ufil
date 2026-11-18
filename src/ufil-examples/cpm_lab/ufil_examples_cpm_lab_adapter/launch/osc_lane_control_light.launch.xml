@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- The defaults of the converter arguments are the ones of config/osc_lane_control_light.yaml. -->
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="node_name" default="osc_lane_control_light" description="Name of the node."/>
+  <arg name="input_topic" default="/lane_control_lights"
+    description="cpm_lab_map_msgs/LaneControlLight topic that is forwarded."/>
+  <arg name="receiver_host" default="127.0.0.1" description="Host of the OSC receiver."/>
+  <arg name="receiver_port" default="9000" description="UDP port of the OSC receiver."/>
+  <arg name="osc_address" default="/lane_control_light" description="OSC address of the messages."/>
+
+  <node pkg="ufil_examples_cpm_lab_adapter" exec="ufil_examples_osc_message_converter_node"
+    name="$(var node_name)" namespace="$(var namespace)" output="screen">
+    <param
+      from="$(find-pkg-share ufil_examples_cpm_lab_adapter)/config/osc_lane_control_light.yaml"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="receiver.host" value="$(var receiver_host)"/>
+    <param name="receiver.port" value="$(var receiver_port)"/>
+    <param name="osc_address" value="$(var osc_address)"/>
+    <remap from="lane_control_lights" to="$(var input_topic)"/>
+  </node>
+</launch>

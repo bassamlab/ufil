@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- Central fusion of the RSU, fusing the object lists of the configured sensors. -->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="namespace" default="rsu" description="Namespace of the RSU."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_central_fusion)/config/default.yaml"
+    description="Fusion parameters (sensors, trust values), loaded on top of the package defaults."/>
+  <arg name="output_topic" default="object_list" description="Published fused objects."/>
+
+  <include file="$(find-pkg-share ufil_central_fusion)/launch/default.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="namespace" value="$(var namespace)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="output_topic" value="$(var output_topic)"/>
+  </include>
+</launch>

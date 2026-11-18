@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+  Point cloud processing pipeline of an outdoor sensor node: the PCL preprocessor and the
+  object tracker composed into one container with intra-process communication.
+-->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="namespace" default="osn" description="Namespace of the pipeline."/>
+  <arg name="input_topic" default="input_cloud" description="Raw lidar point cloud."/>
+  <arg name="output_topic" default="object_list" description="Published object list."/>
+  <arg name="static_object_file" default=""
+    description="CSV file with static areas (x, y, z, yaw, length, width, height); empty disables clipping."/>
+  <arg name="pcl_preprocessor_params_file"
+    default="$(find-pkg-share ufil_pcl_preprocessor)/config/default.yaml"
+    description="Preprocessor parameters, loaded on top of its package defaults."/>
+  <arg name="osn_tracker_params_file"
+    default="$(find-pkg-share ufil_osn_tracker)/config/default.yaml"
+    description="Tracker parameters, loaded on top of its package defaults."/>
+
+  <node_container pkg="rclcpp_components" exec="component_container" name="osn_container"
+    namespace="$(var namespace)" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+
+    <composable_node pkg="ufil_pcl_preprocessor" plugin="ufil_pcl_preprocessor::PclPreprocessorNode"
+      name="ufil_pcl_preprocessor" namespace="$(var namespace)">
+      <param from="$(find-pkg-share ufil_pcl_preprocessor)/config/default.yaml"/>
+      <param from="$(var pcl_preprocessor_params_file)"/>
+      <param name="use_sim_time" value="$(var use_sim_time)"/>
+      <param name="static_object_file" value="$(var static_object_file)"/>
+      <remap from="input_cloud" to="$(var input_topic)"/>
+      <extra_arg name="use_intra_process_comms" value="true"/>
+    </composable_node>
+
+    <composable_node pkg="ufil_osn_tracker" plugin="ufil_osn_tracker::OsnTrackerNode"
+      name="ufil_osn_tracker" namespace="$(var namespace)">
+      <param from="$(find-pkg-share ufil_osn_tracker)/config/default.yaml"/>
+      <param from="$(var osn_tracker_params_file)"/>
+      <param name="use_sim_time" value="$(var use_sim_time)"/>
+      <remap from="object_list" to="$(var output_topic)"/>
+      <extra_arg name="use_intra_process_comms" value="true"/>
+    </composable_node>
+  </node_container>
+</launch>

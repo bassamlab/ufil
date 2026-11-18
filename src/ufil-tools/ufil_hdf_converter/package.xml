@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ufil_hdf_converter</name>
+  <version>0.2.0</version>
+  <description>
+    Command line tool ufil_hdf_converter converting a rosbag2 bag into an HDF5 file that follows
+    the SFB data handbook. Supports IMU, magnetic field, GNSS, odometry, point cloud, occupancy
+    grid, TF and UFIL object list messages.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>python3-h5py</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>rosbag2_py</exec_depend>
+  <exec_depend>rosidl_runtime_py</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>tf2_msgs</exec_depend>
+  <exec_depend>ufil_msgs</exec_depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <test_depend>geometry_msgs</test_depend>
+  <test_depend>std_msgs</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

@@ -1,0 +1,17 @@
+# Default parameters of ufil_obu_object_aggregation::ObjectAggregationNode.
+/**:
+  ros__parameters:
+    # The own vehicle, defaults describe a passenger car.
+    object:
+      length: 4.5
+      width: 1.8
+      # Index of ufil_msgs/Classification: 0 = CAR, 1 = TRUCK, ... 6 = OTHER.
+      classification: 0
+
+    # -1 selects the standard UTM zone of the current position.
+    utm_zone: -1
+
+    diagnostic_updater:
+      period: 1.0
+      # Prefix diagnostic names with the node namespace to tell multiple vehicles apart.
+      use_fqn: true

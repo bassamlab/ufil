@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(h|hpp|cpp|cc\\)$\")",
+      "Bash(grep -E \"\\\\.\\(cpp|hpp\\)$\")",
+      "Bash(grep -E \"\\\\.\\(py|m\\)$\")"
+    ]
+  }
+}

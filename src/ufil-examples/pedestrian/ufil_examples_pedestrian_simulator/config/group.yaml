@@ -1,0 +1,52 @@
+# Group: four pedestrians walk north in a tight 2 x 2 formation (1 m apart) over the east
+# crosswalk. Behind the crosswalk the group splits: the left pair continues north, the
+# right pair turns east.
+# Tracker challenge: closely spaced targets, association ambiguity, track splitting.
+name: group
+runtime: 30
+error_covariance: 0.1
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 4.2]
+        time: 0
+      - position: [23.5, 39.5]
+        time: 27.15
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [24.5, 4.2]
+        time: 0
+      - position: [24.5, 27.5]
+        time: 17.92
+      - position: [39.5, 27.5]
+        time: 29.46
+  - id: 3
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 3.0]
+        time: 0
+      - position: [23.5, 38.3]
+        time: 27.15
+  - id: 4
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [24.5, 3.0]
+        time: 0
+      - position: [24.5, 26.5]
+        time: 18.08
+      - position: [38.5, 26.5]
+        time: 28.85

@@ -1,0 +1,65 @@
+# Default parameters of ufil_central_fusion::CentralFusionNode. All parameters are read-only.
+/**:
+  ros__parameters:
+    target_frame: map
+
+    fusion:
+      period: 0.02
+      buffer_duration: 2.0
+
+    output:
+      min_existence_probability: 0.2
+
+    association:
+      threshold: 3.0
+
+    existence:
+      min_weight: 0.2
+      max_weight: 0.8
+      decay_factor: 0.05
+
+    dimension:
+      grid_resolution: 0.1
+      alpha: 0.95
+      p_min: 0.1
+      p_ref: 0.5
+      p_max: 0.9
+
+    # Fused sensors, each configured by the parameters below its name.
+    sensor_names: [osn, cam]
+
+    # Outdoor sensor node.
+    osn:
+      topic: /osn/object_list
+      fov_topic: /osn/sensor_fov
+      occlusion_topic: /osn/dynamic_occlusion_grid
+      is_cam: false
+      trust:
+        existence: 0.7
+        car: 0.8
+        truck: 0.8
+        motorcycle: 0.8
+        bicycle: 0.8
+        pedestrian: 0.8
+        stationary: 0.8
+        other: 0.8
+
+    # Objects from received CAMs, see ufil_rsu/launch/cam.launch.xml.
+    cam:
+      topic: /rsu/cam/object_list
+      fov_topic: ""
+      occlusion_topic: ""
+      is_cam: true
+      trust:
+        existence: 0.8
+        car: 0.8
+        truck: 0.8
+        motorcycle: 0.8
+        bicycle: 0.8
+        pedestrian: 0.8
+        stationary: 0.8
+        other: 0.8
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

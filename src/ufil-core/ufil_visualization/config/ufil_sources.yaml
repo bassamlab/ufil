@@ -1,0 +1,37 @@
+# Object lists of the UFIL examples, visualized by one ufil_visualization::ObjectListMarkerArrayNode
+# on top of config/object_list.yaml. Each source publishes its markers on its own topic in its
+# own colour. Examples override single values (e.g. rsu.input_topic) or the list of sources in
+# their own parameter file.
+/**:
+  ros__parameters:
+    sources: [osn, obu, rsu_cam, rsu, ssl]
+
+    # Outdoor sensor node: blue (#3584e4).
+    osn:
+      input_topic: /osn/object_list
+      output_topic: /osn/object_markers
+      color: [0.208, 0.518, 0.894, 1.0]
+
+    # On-board units: green (#2ec27e).
+    obu:
+      input_topic: /obu/object_list
+      output_topic: /obu/object_markers
+      color: [0.180, 0.761, 0.494, 1.0]
+
+    # Objects received as CAM: violet (#9141ac).
+    rsu_cam:
+      input_topic: /rsu/cam/object_list
+      output_topic: /rsu/cam/object_markers
+      color: [0.569, 0.255, 0.675, 1.0]
+
+    # Road-side unit fusion: orange (#ff7800).
+    rsu:
+      input_topic: /rsu/object_list
+      output_topic: /rsu/object_markers
+      color: [1.0, 0.471, 0.0, 1.0]
+
+    # Smart sensor lab: yellow (#f5c211).
+    ssl:
+      input_topic: /ssl/object_list
+      output_topic: /ssl/object_markers
+      color: [0.961, 0.761, 0.067, 1.0]

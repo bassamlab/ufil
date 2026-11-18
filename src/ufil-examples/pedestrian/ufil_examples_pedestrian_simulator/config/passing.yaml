@@ -1,0 +1,50 @@
+# Passing: two pedestrians enter at the south and north map borders, walk towards each other
+# along the east sidewalk, pass in the middle of the east crosswalk, and leave at the opposite
+# border. Two more pedestrians appear later on the west side and leave again.
+# Tracker challenge: opposing targets passing closely, track initialisation and termination.
+name: passing
+runtime: 40
+error_covariance: 0.1
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [24.5, 0.5]
+        time: 0
+      - position: [24.5, 39.5]
+        time: 26
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 39.5]
+        time: 0
+      - position: [23.5, 0.5]
+        time: 26
+  - id: 3
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [16.5, 0.5]
+        time: 4
+      - position: [16.5, 39.5]
+        time: 31.86
+  - id: 4
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 26.5]
+        time: 10
+      - position: [15.5, 26.5]
+        time: 20.71
+      - position: [15.5, 0.5]
+        time: 39.29

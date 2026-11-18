@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_visualization)/config/lanelet_map.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="map_path" default="" description="Lanelet2 OSM map to visualize."/>
+  <arg name="frame_id" default="map" description="Frame of the published markers."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="node_name" default="lanelet_map_marker_array" description="Name of the node."/>
+  <arg name="output_topic" default="map_markers" description="Published map markers."/>
+
+  <node pkg="ufil_visualization" exec="lanelet_map_marker_array_node" name="$(var node_name)"
+    namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/lanelet_map.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="map_path" value="$(var map_path)"/>
+    <param name="frame_id" value="$(var frame_id)"/>
+    <remap from="map_markers" to="$(var output_topic)"/>
+  </node>
+</launch>

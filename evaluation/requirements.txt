@@ -1,0 +1,13 @@
+h5py
+joblib
+numpy
+pandas
+python-dateutil
+pytz
+pyyaml
+scikit-learn
+scipy
+six
+threadpoolctl
+tzdata
+matplotlib

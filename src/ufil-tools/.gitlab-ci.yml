@@ -1,0 +1,45 @@
+stages:
+  - code-quality-test
+  - package-quality-test
+
+default:
+  image: docker.io/library/ros:jazzy-ros-base-noble
+  # The group runners do not pick up untagged jobs; `docker` selects the Docker-executor
+  # runners (cpm-buildfarm-amd64 / -arm64).
+  tags:
+    - docker
+
+lint-cmake-job:
+  stage: code-quality-test
+  script:
+    - echo "Linting cmake..."
+    - ament_lint_cmake
+    - echo "No lint issues found in cmake file."
+
+lint-python-job:
+  stage: code-quality-test
+  script:
+    - echo "Linting python..."
+    - ament_flake8
+    - echo "No lint issues found in python files."
+
+pep257-check-job:
+  stage: code-quality-test
+  script:
+    - echo "Checking docstrings..."
+    - ament_pep257
+    - echo "No issues found with docstrings."
+
+check-xml-job:
+  stage: package-quality-test
+  script:
+    - echo "Linting xml..."
+    - ament_xmllint
+    - echo "No lint issues found in xml files."
+
+check-copyright-job:
+  stage: package-quality-test
+  script:
+    - echo "Check for copyright..."
+    - ament_copyright
+    - echo "No issues found with copyright notices in files."

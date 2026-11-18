@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_osn_classifier)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+
+  <node pkg="ufil_osn_classifier" exec="classifier"
+    name="ufil_osn_classifier" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_osn_classifier)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+  </node>
+</launch>

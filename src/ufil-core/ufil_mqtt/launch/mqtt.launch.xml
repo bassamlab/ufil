@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- Kept for compatibility, the arguments are passed on to default.launch.xml. -->
+<launch>
+  <arg name="mqtt_use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="mqtt_namespace" default="" description="Namespace of the MQTT converter node."/>
+  <arg name="mqtt_node_name" default="mqtt_message_converter_node"
+    description="Name of the MQTT converter node."/>
+  <arg name="mqtt_protocol" default="tcp" description="Transport to the broker: tcp or ssl."/>
+  <arg name="mqtt_host" default="localhost" description="Host of the MQTT broker."/>
+  <arg name="mqtt_port" default="1883" description="Port of the MQTT broker."/>
+  <arg name="mqtt_id" default="" description="MQTT client ID, empty: the node name."/>
+  <arg name="mqtt_source_topic" default="/lab/groundtruth" description="ROS 2 topic to forward."/>
+  <arg name="mqtt_topic" default="ufil/object_list" description="MQTT topic to publish on."/>
+  <arg name="mqtt_message_type" default="object_list"
+    description="Message type of mqtt_source_topic: object_list or occupancy_grid."/>
+
+  <include file="$(find-pkg-share ufil_mqtt)/launch/default.launch.xml">
+    <arg name="use_sim_time" value="$(var mqtt_use_sim_time)"/>
+    <arg name="namespace" value="$(var mqtt_namespace)"/>
+    <arg name="node_name" value="$(var mqtt_node_name)"/>
+    <arg name="input_topic" value="$(var mqtt_source_topic)"/>
+    <arg name="message_type" value="$(var mqtt_message_type)"/>
+    <arg name="broker_protocol" value="$(var mqtt_protocol)"/>
+    <arg name="broker_host" value="$(var mqtt_host)"/>
+    <arg name="broker_port" value="$(var mqtt_port)"/>
+    <arg name="client_id" value="$(var mqtt_id)"/>
+    <arg name="mqtt_topic" value="$(var mqtt_topic)"/>
+  </include>
+</launch>

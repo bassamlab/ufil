@@ -1,0 +1,103 @@
+# Crowd: eight pedestrians with staggered starts use all sidewalks and both crosswalks in
+# both directions at the same time, at different speeds (1 to 2 m/s).
+# Tracker challenge: many simultaneous targets, births/deaths, opposing flows.
+name: crowd
+runtime: 37
+error_covariance: 0.1
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 12.5]
+        time: 0
+      - position: [16.5, 12.5]
+        time: 11.43
+      - position: [16.5, 39.5]
+        time: 30.71
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [39.5, 27.5]
+        time: 0
+      - position: [23.5, 27.5]
+        time: 11.43
+      - position: [23.5, 0.5]
+        time: 30.71
+  - id: 3
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [15.5, 39.5]
+        time: 2
+      - position: [15.5, 13.5]
+        time: 20.57
+      - position: [0.5, 13.5]
+        time: 31.29
+  - id: 4
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [24.5, 0.5]
+        time: 2
+      - position: [24.5, 26.5]
+        time: 20.57
+      - position: [39.5, 26.5]
+        time: 31.29
+  - id: 5
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 26.5]
+        time: 4
+      - position: [15.5, 26.5]
+        time: 14.71
+      - position: [15.5, 0.5]
+        time: 33.29
+  - id: 6
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [39.5, 13.5]
+        time: 6
+      - position: [24.5, 13.5]
+        time: 16.71
+      - position: [24.5, 39.5]
+        time: 35.29
+  - id: 7
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 39.5]
+        time: 8
+      - position: [23.5, 26.5]
+        time: 21
+      - position: [39.5, 26.5]
+        time: 37
+  - id: 8
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 26.5]
+        time: 10
+      - position: [16.5, 26.5]
+        time: 18
+      - position: [16.5, 39.5]
+        time: 24.5

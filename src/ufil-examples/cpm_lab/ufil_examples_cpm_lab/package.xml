@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ufil_examples_cpm_lab</name>
+  <version>0.2.0</version>
+  <description>
+    Launch files, configuration, URDF and Lanelet2 map of the UFIL demonstrator in the CPM Lab:
+    on-board units of the lab vehicles (CAM via the CPM Lab adapter) and the visualization on the
+    head machine; outdoor sensor node, sensitive surface layer and road side unit with central
+    fusion on the headless machine. All parameters are in config/cpm-lab.yaml.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+  <author email="m.priegnitz@embedded.rwth-aachen.de">milo</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>etsi_its_conversion</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_xml</exec_depend>
+  <exec_depend>rclcpp_components</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>ssl_vehicle_tracking</exec_depend>
+  <exec_depend>ssl_wheel_tracker</exec_depend>
+  <exec_depend>ufil_central_fusion</exec_depend>
+  <exec_depend>ufil_etsi</exec_depend>
+  <exec_depend>ufil_examples_cpm_lab_adapter</exec_depend>
+  <exec_depend>ufil_message_filter</exec_depend>
+  <exec_depend>ufil_osn_tracker</exec_depend>
+  <exec_depend>ufil_pcl_preprocessor</exec_depend>
+  <exec_depend>ufil_udp</exec_depend>
+  <exec_depend>ufil_visualization</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

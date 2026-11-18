@@ -1,0 +1,7 @@
+# Overrides of carla-highway.yaml when head and headless run on a single machine
+# (carla-highway.launch.xml).
+
+# The RSU receives the CAMs on the same machine.
+/**/udp_sender:
+  ros__parameters:
+    target_address: 127.0.0.1

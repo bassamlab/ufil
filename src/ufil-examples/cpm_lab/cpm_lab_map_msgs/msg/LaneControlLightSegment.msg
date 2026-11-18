@@ -1,0 +1,2 @@
+int32 segment_index
+string image_name

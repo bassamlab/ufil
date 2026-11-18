@@ -1,0 +1,79 @@
+# Births and deaths: six pedestrians enter the scene at different times (every 4 to 10 s),
+# mostly at the map border; one steps out mid-sidewalk. Each leaves the scene at its end.
+# Tracker challenge: track initialisation and termination.
+name: appearing
+runtime: 51
+error_covariance: 0.1
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 12.5]
+        time: 0
+      - position: [15.5, 12.5]
+        time: 10.71
+      - position: [15.5, 0.5]
+        time: 19.29
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 39.5]
+        time: 4
+      - position: [23.5, 0.5]
+        time: 31.86
+  - id: 3
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [39.5, 27.5]
+        time: 8
+      - position: [24.5, 27.5]
+        time: 18.71
+      - position: [24.5, 39.5]
+        time: 27.29
+  - id: 4
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 26.5]
+        time: 12
+      - position: [15.5, 26.5]
+        time: 22.71
+      - position: [15.5, 13.5]
+        time: 32
+      - position: [0.5, 13.5]
+        time: 42.71
+  - id: 5
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [39.5, 13.5]
+        time: 20
+      - position: [24.5, 13.5]
+        time: 30.71
+      - position: [24.5, 26.5]
+        time: 40
+      - position: [39.5, 26.5]
+        time: 50.71
+  - id: 6
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [9.0, 27.5]
+        time: 30
+      - position: [0.5, 27.5]
+        time: 36.07

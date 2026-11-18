@@ -1,0 +1,13 @@
+# Default parameters of ufil_examples_cpm_lab_adapter::OscLaneControlLightNode. All parameters
+# are read-only. The input topic is "lane_control_lights".
+/**:
+  ros__parameters:
+    receiver:
+      host: 127.0.0.1
+      port: 9000
+
+    osc_address: /lane_control_light
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

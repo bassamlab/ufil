@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+  Compatibility wrapper around lanelet_map.launch.xml for launch files that include several
+  ufil_visualization nodes. The prefixed argument names avoid clashes between them; the group
+  keeps the arguments of lanelet_map.launch.xml from leaking into the including launch file.
+  The markers are published on /map as before.
+-->
+<launch>
+  <arg name="lanelet_map_marker_array_use_sim_time" default="true"
+    description="Use the /clock topic as time source."/>
+  <arg name="lanelet_map_marker_array_namespace" default="" description="Namespace of the node."/>
+  <arg name="lanelet_map_marker_array_map_path" default=""
+    description="Lanelet2 OSM map to visualize."/>
+  <arg name="lanelet_map_marker_array_frame_id" default="map"
+    description="Frame of the published markers."/>
+  <arg name="lanelet_map_marker_array_config_file"
+    default="$(find-pkg-share ufil_visualization)/config/lanelet_map.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="lanelet_map_marker_array_node_name" default="lanelet_map_marker_array_node"
+    description="Name of the node."/>
+
+  <group>
+    <include file="$(find-pkg-share ufil_visualization)/launch/lanelet_map.launch.xml">
+      <arg name="use_sim_time" value="$(var lanelet_map_marker_array_use_sim_time)"/>
+      <arg name="params_file" value="$(var lanelet_map_marker_array_config_file)"/>
+      <arg name="map_path" value="$(var lanelet_map_marker_array_map_path)"/>
+      <arg name="frame_id" value="$(var lanelet_map_marker_array_frame_id)"/>
+      <arg name="namespace" value="$(var lanelet_map_marker_array_namespace)"/>
+      <arg name="node_name" value="$(var lanelet_map_marker_array_node_name)"/>
+      <arg name="output_topic" value="map"/>
+    </include>
+  </group>
+</launch>

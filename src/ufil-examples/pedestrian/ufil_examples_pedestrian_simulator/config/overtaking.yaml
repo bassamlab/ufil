@@ -1,0 +1,31 @@
+# Overtaking: a jogger (3 m/s) overtakes a slow walker (1 m/s) on the west crosswalk and
+# merges back in front of it.
+# Tracker challenge: very different speeds, close pass, lateral manoeuvre.
+name: overtaking
+runtime: 39
+error_covariance: 0.1
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [16.5, 0.5]
+        time: 0
+      - position: [16.5, 39.5]
+        time: 39
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [15.5, 0.5]
+        time: 13
+      - position: [15.5, 22.5]
+        time: 20.33
+      - position: [16.5, 24.0]
+        time: 20.93
+      - position: [16.5, 39.5]
+        time: 26.1

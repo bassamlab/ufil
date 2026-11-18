@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ufil_examples_pedestrian</name>
+  <version>0.2.0</version>
+  <description>
+    Launch files, configuration, URDF and Lanelet2 map of the UFIL pedestrian example on a
+    synthetic four-way intersection: transforms and visualization on the head machine; pedestrian
+    scenario simulator and pedestrian tracker of an outdoor sensor node on the headless machine.
+    All parameters are in config/pedestrian.yaml.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_xml</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>ufil_examples_pedestrian_simulator</exec_depend>
+  <exec_depend>ufil_examples_pedestrian_tracker</exec_depend>
+  <exec_depend>ufil_visualization</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

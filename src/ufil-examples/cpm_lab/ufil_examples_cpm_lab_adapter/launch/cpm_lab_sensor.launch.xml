@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_cpm_lab_adapter)/config/cpm_lab_sensor.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node and its sensor topics."/>
+  <arg name="node_name" default="cpm_lab_sensor" description="Name of the node."/>
+  <arg name="vehicle_id" default="1" description="Id of the CPM Lab vehicle."/>
+  <arg name="target_frame" default="map" description="Frame whose origin is at the GNSS origin."/>
+  <arg name="vehicle_state_topic" default="/lab/vehicle_$(var vehicle_id)/vehicleState"
+    description="cpm_lab_lab_msgs/VehicleState input."/>
+
+  <node pkg="ufil_examples_cpm_lab_adapter" exec="ufil_examples_cpm_lab_adapter_sensor_node"
+    name="$(var node_name)" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_examples_cpm_lab_adapter)/config/cpm_lab_sensor.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="vehicle_id" value="$(var vehicle_id)"/>
+    <param name="target_frame" value="$(var target_frame)"/>
+    <remap from="vehicle_state" to="$(var vehicle_state_topic)"/>
+  </node>
+</launch>

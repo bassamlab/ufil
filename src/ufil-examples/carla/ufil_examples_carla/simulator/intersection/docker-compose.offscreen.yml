@@ -1,0 +1,46 @@
+x-launch-mount:   &launch-mount     ../carla-ros-bridge.launch.py:/bridge.launch.py
+x-objects-mount:  &objects-mount    ./objects.json:/objects.json
+x-config-mount:   &config-mount     ./scenario-config.yml:/scenario-config.yml
+x-traffic-mount:  &traffic-mount    ../traffic-manager-client.py:/opt/carla/PythonAPI/traffic-manager-client.py
+x-debug-mount:    &debug-mount      ../debug-client.py:/opt/carla/PythonAPI/debug-client.py
+
+services:
+  carla-server:
+    extends:
+      file: ../docker-services.yml
+      service: carla-server-offscreen
+    network_mode: "host"
+  
+  carla-ros-bridge:
+    extends:
+      file: ../docker-services.yml
+      service: carla-ros-bridge
+    network_mode: "host"
+    volumes:
+      - *launch-mount
+      - *objects-mount
+    environment:
+      - FASTDDS_BUILTIN_TRANSPORTS=UDPv4
+      - ROS_DOMAIN_ID=42
+    command: bash -ic 'ros2 launch /bridge.launch.py'
+    healthcheck:
+      test: bash -ic 'ros2 topic list | grep /clock'
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 15s
+
+  carla-traffic-manager:
+    extends:
+      file: ../docker-services.yml
+      service: carla-client
+    network_mode: "host"
+    volumes:
+      - *traffic-mount
+      - *config-mount
+    depends_on:
+      carla-ros-bridge:
+        condition: service_healthy
+    command: bash -ic 'sleep 10 && python3 -u traffic-manager-client.py --asynch -w 0 -n 15 --respawn --filterv vehicle.tesla.model3'
+
+    

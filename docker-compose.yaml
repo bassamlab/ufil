@@ -1,0 +1,191 @@
+x-base: &base
+  # Built locally (`docker compose build`); the name lets all services share one image.
+  image: ufil-runtime:local
+  build:
+    context: docker
+    target: runtime
+  working_dir: /workspace
+
+# Only for services that need host devices (/dev)
+x-privileged: &privileged
+  privileged: true
+
+# Shared by all ROS services, so they always talk over the same middleware. Select it on launch with
+# RMW_IMPLEMENTATION (rmw_zenoh_cpp, rmw_fastrtps_cpp or rmw_cyclonedds_cpp). With Zenoh, the nodes
+# connect to the `router` service and listen on all interfaces, so peers in other containers can
+# reach them; point ZENOH_CONFIG_OVERRIDE elsewhere to use a remote router.
+x-ros-env: &ros-env
+  RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_zenoh_cpp}
+  ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-21}
+  ZENOH_CONFIG_OVERRIDE: ${ZENOH_CONFIG_OVERRIDE:-connect/endpoints=["tcp/router:7447"];listen/endpoints=["tcp/0.0.0.0:0"]}
+
+x-ros: &ros
+  <<: *base
+  environment: *ros-env
+  depends_on:
+    router:
+      condition: service_started
+      required: false
+
+services:
+  # Workflow
+  build:
+    <<: *base
+    container_name: ufil-build
+    volumes:
+      - ./:/workspace
+    command:
+      - /bin/bash
+      - -c
+      - source /opt/ros/jazzy/setup.bash && make sequential
+    profiles: [build]
+
+  terminal:
+    <<: [*ros, *privileged]
+    container_name: ufil-terminal
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/workspace
+      - /dev/shm:/dev/shm
+      - /media:/media
+    command: [/bin/bash]
+    profiles: [terminal]
+
+  bag:
+    <<: *ros
+    container_name: ufil-bag
+    volumes:
+      - ./:/workspace
+      # Defaulted (not required) so other profiles don't need BAG set; checked at runtime instead.
+      - ${BAG:-/dev/null}:/bag:ro
+    command:
+      - /bin/bash
+      - -c
+      - >-
+        [ -d /bag ] || { echo "BAG must be set to the host path of a ros2 bag directory" >&2; exit 1; };
+        source install/setup.bash && ros2 bag play /bag --clock
+    profiles: [bag]
+
+  # Zenoh router, started with every ROS profile. Exits right away if another RMW is selected or
+  # ZENOH_ROUTER=false (e.g. when ZENOH_CONFIG_OVERRIDE points at a router on another machine).
+  # `COMPOSE_PROFILES=router` launches it alone; port 7447 is published for remote machines.
+  router:
+    <<: *base
+    container_name: ufil-router
+    environment:
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_zenoh_cpp}
+      ZENOH_ROUTER: ${ZENOH_ROUTER:-true}
+    ports:
+      - "7447:7447"
+    command:
+      - /bin/bash
+      - -c
+      - >-
+        [ "$${RMW_IMPLEMENTATION}" = rmw_zenoh_cpp ] && [ "$${ZENOH_ROUTER}" = true ] || exit 0;
+        source /opt/ros/jazzy/setup.bash && ros2 run rmw_zenoh_cpp rmw_zenohd
+    profiles:
+      - router
+      - terminal
+      - bag
+      - foxglove-bridge
+      - carla-highway
+      - carla-highway-head
+      - carla-highway-headless
+      - cpm-lab
+      - cpm-lab-head
+      - cpm-lab-headless
+      - pedestrian
+
+  # Viz
+  foxglove-bridge:
+    <<: *ros
+    container_name: ufil-foxglove
+    volumes:
+      - ./:/workspace
+    ports:
+      - "8765:8765"
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_viz_helpers foxglove-bridge.launch.xml
+    profiles: [foxglove-bridge]
+
+  # Examples
+  carla-highway:
+    <<: [*ros, *privileged]
+    container_name: ufil-carla-highway
+    volumes:
+      - ./:/workspace
+      - /dev:/dev
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_carla carla-highway.launch.xml use_sim_time:=false
+    profiles: [carla-highway]
+  carla-highway-head:
+    <<: [*ros, *privileged]
+    container_name: ufil-carla-highway-head
+    volumes:
+      - ./:/workspace
+      - /dev:/dev
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_carla carla-highway_head.launch.xml use_sim_time:=false
+    profiles: [carla-highway-head]
+  carla-highway-headless:
+    <<: [*ros, *privileged]
+    container_name: ufil-carla-highway-headless
+    volumes:
+      - ./:/workspace
+      - /dev:/dev
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_carla carla-highway_headless.launch.xml use_sim_time:=false
+    profiles: [carla-highway-headless]
+
+  cpm-lab:
+    <<: [*ros, *privileged]
+    container_name: ufil-cpm-lab
+    volumes:
+      - ./:/workspace
+      - /dev:/dev
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_cpm_lab cpm-lab.launch.xml use_sim_time:=false
+    profiles: [cpm-lab]
+  cpm-lab-head:
+    <<: [*ros, *privileged]
+    container_name: ufil-cpm-lab-head
+    volumes:
+      - ./:/workspace
+      - /dev:/dev
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_cpm_lab cpm-lab_head.launch.xml use_sim_time:=false
+    profiles: [cpm-lab-head]
+  cpm-lab-headless:
+    <<: [*ros, *privileged]
+    container_name: ufil-cpm-lab-headless
+    volumes:
+      - ./:/workspace
+      - /dev:/dev
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_cpm_lab cpm-lab_headless.launch.xml use_sim_time:=false
+    profiles: [cpm-lab-headless]
+  pedestrian:
+    <<: *ros
+    container_name: ufil-pedestrian
+    volumes:
+      - ./:/workspace
+    command:
+      - /bin/bash
+      - -c
+      - source install/setup.bash && ros2 launch ufil_examples_pedestrian pedestrian.launch.xml use_sim_time:=false scenario:=${PEDESTRIAN_SCENARIO:-crossing.yaml}
+    profiles: [pedestrian]

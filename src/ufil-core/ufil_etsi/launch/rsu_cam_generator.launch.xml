@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- Sends the CAMs of a road side unit every second. -->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_etsi)/config/rsu_cam_generator.yaml"
+    description="Parameters loaded on top of the package defaults (e.g. the RSU position)."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="node_name" default="rsu_cam_generator_node" description="Name of the node."/>
+  <arg name="output_topic" default="cam" description="Generated CAMs."/>
+
+  <node pkg="ufil_etsi" exec="rsu_cam_generator_node" name="$(var node_name)"
+    namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/rsu_cam_generator.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="cam" to="$(var output_topic)"/>
+  </node>
+</launch>

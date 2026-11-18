@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ufil_examples_carla_adapter</name>
+  <version>0.2.0</version>
+  <description>
+    Converts the ground-truth objects of the CARLA ROS bridge (derived_object_msgs/ObjectArray
+    with carla_msgs/CarlaActorList) into UFIL object lists, optionally limited to the cooperative
+    vehicles. Provides a ROS-independent core library and the ROS 2 component
+    ufil_examples_carla_adapter::CarlaAdapterNode.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+  <author email="priegnitz@embedded.rwth-aachen.de">cpm</author>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+
+  <!-- ROS 2 component -->
+  <depend>carla_msgs</depend>
+  <depend>derived_object_msgs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>diagnostic_updater</depend>
+  <depend>geometry_msgs</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>ufil_msgs</depend>
+
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_xml</exec_depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>class_loader</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

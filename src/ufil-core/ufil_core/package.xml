@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ufil_core</name>
+  <version>0.2.0</version>
+  <description>
+    Meta package of the Unified Framework for Infrastructure Localization (UFIL) core: messages,
+    ROS conversions, object tracking, ETSI CAM handling, UDP/MQTT/OSC bridges, message filters
+    and visualization.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>ufil_etsi</exec_depend>
+  <exec_depend>ufil_message_filter</exec_depend>
+  <exec_depend>ufil_mqtt</exec_depend>
+  <exec_depend>ufil_msgs</exec_depend>
+  <exec_depend>ufil_object_tracking</exec_depend>
+  <exec_depend>ufil_osc</exec_depend>
+  <exec_depend>ufil_ros</exec_depend>
+  <exec_depend>ufil_udp</exec_depend>
+  <exec_depend>ufil_visualization</exec_depend>
+  <exec_depend>ufil_viz_helpers</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

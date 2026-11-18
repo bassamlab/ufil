@@ -1,0 +1,28 @@
+# Default parameters of ssl_wheel_tracker::SslWheelTrackerNode. All parameters are read-only.
+/**:
+  ros__parameters:
+    # Pressure grids of the mats whose wheels are tracked together.
+    input_topics: ["ssl_1/map"]
+    tracking_frame: map
+    update_period: 0.01
+
+    # Wheel contacts: local pressure maxima [cells].
+    detection:
+      threshold: 10
+      min_peak_distance: 2
+      contact_radius: 3
+      exclude_border: 1
+
+    # Constant velocity Kalman filter, global nearest neighbour association.
+    tracking:
+      process_noise: 0.01
+      measurement_noise: 0.01
+      gate_distance: 2.0
+      confirmation_hits: 4
+      deletion_timeout: 0.25
+      history_length: 10
+
+    # Declared by diagnostic_updater::Updater.
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

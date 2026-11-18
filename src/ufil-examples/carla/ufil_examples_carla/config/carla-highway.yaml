@@ -1,0 +1,172 @@
+# Parameters of all nodes of the CARLA highway example, for the head (vehicles, visualization),
+# the headless (infrastructure) machine and the simulated sensors. Loaded with launch
+# substitutions (allow_substs), so installed files are given with find-pkg-share; a dollar sign
+# must not be used otherwise, not even in comments. Values not given here are the package
+# defaults. The single-machine launch file carla-highway.launch.xml overrides machine-specific
+# values with carla-highway_local.yaml.
+
+# --- Head and simulation: simulator objects in /obu ------------------------------------------
+
+# Objects within the area of interest (vertices [x1, y1, x2, y2, ...] in the map frame [m]).
+# Also used by the RSU filter of the headless machine.
+/**/object_list_position_filter:
+  ros__parameters:
+    area_of_interest:
+      enabled: true
+      vertices: [201.0, -1.5, 201.0, 79.5, 217.0, 79.5, 217.0, -1.5]
+
+# --- Head: on-board units of the vehicles 0 to 6 ---------------------------------------------
+
+# CAM generation of every vehicle; ETSI time starts in 2004.
+/**/vehicle_cam_generator_node:
+  ros__parameters:
+    time_shift_nanosec: 1104537600000000000
+    target_frame: utm_32n
+/obu_0/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 0}
+/obu_1/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 1}
+/obu_2/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 2}
+/obu_3/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 3}
+/obu_4/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 4}
+/obu_5/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 5}
+/obu_6/vehicle_cam_generator_node:
+  ros__parameters: {object_array_index: 6}
+
+# ETSI encoding of the CAMs of every vehicle.
+/**/cam_encoder:
+  ros__parameters:
+    udp2ros_etsi_types: [""]
+    ros2udp_etsi_types: [cam]
+    has_btp_destination_port: true
+    btp_destination_port_offset: 0
+    etsi_message_payload_offset: 4
+
+# CAMs of every vehicle are sent to the RSU of the headless machine.
+/**/udp_sender:
+  ros__parameters:
+    target_address: 192.168.1.41
+    target_port: 5000
+
+# --- Headless: outdoor sensor node -----------------------------------------------------------
+
+/osn/ufil_pcl_preprocessor:
+  ros__parameters:
+    static_object_file: $(find-pkg-share ufil_examples_carla)/config/static_object_file.highway.csv
+    filter:
+      z_min: 0.5
+      outlier_radius: 1.5
+      min_neighbors: 5
+    fov:
+      num_bins: 40
+      max_range: 40.0
+
+# --- Headless: sensitive surface layer (one mat) ---------------------------------------------
+
+/ssl/ssl_wheel_tracker:
+  ros__parameters:
+    input_topics: [ssl_1/map]
+
+# Template of the CARLA cars from ssl_vehicle_tracking.
+/ssl/ssl_vehicle_tracking:
+  ros__parameters:
+    vehicle_templates: [car_carla.json]
+
+# --- Headless: road side unit ----------------------------------------------------------------
+
+/rsu/cam/udp_receiver:
+  ros__parameters:
+    listen_port: 5000
+
+# ETSI decoding of the received CAMs.
+/rsu/cam/cam_decoder:
+  ros__parameters:
+    udp2ros_etsi_types: [cam]
+    ros2udp_etsi_types: [""]
+    has_btp_destination_port: true
+    btp_destination_port_offset: 0
+    etsi_message_payload_offset: 4
+
+/rsu/cam/vehicle_cam_receiver_node:
+  ros__parameters:
+    time_shift_nanosec: 1104537600000000000
+    target_frame: map
+
+# Fusion of the outdoor sensor node, the sensitive surface layer and the CAMs.
+/rsu/central_fusion:
+  ros__parameters:
+    fusion:
+      buffer_duration: 5.0
+    association:
+      threshold: 5.0
+    existence:
+      min_weight: 0.0
+      max_weight: 1.0
+    dimension:
+      alpha: 0.99
+
+    sensor_names: [osn, ssl, cam]
+    osn:
+      topic: /osn/object_list
+      fov_topic: /osn/sensor_fov
+      occlusion_topic: /osn/dynamic_occlusion_grid
+      is_cam: false
+      trust:
+        existence: 0.8
+        car: 0.8
+        truck: 0.8
+        motorcycle: 0.8
+        bicycle: 0.8
+        pedestrian: 0.8
+        stationary: 0.8
+        other: 0.8
+    ssl:
+      topic: /ssl/object_list
+      fov_topic: ""
+      occlusion_topic: ""
+      is_cam: false
+      trust:
+        existence: 0.8
+        car: 0.8
+        truck: 0.8
+        motorcycle: 0.8
+        bicycle: 0.8
+        pedestrian: 0.8
+        stationary: 0.8
+        other: 0.8
+    cam:
+      topic: /rsu/cam/object_list
+      fov_topic: ""
+      occlusion_topic: ""
+      is_cam: true
+      trust:
+        existence: 0.8
+        car: 0.8
+        truck: 0.8
+        motorcycle: 0.8
+        bicycle: 0.8
+        pedestrian: 0.8
+        stationary: 0.8
+        other: 0.8
+
+# --- Simulation: virtual sensitive surface layer mat -----------------------------------------
+
+# Mat 1 (topic /ssl/ssl_1/map) with its corner at (x, y, z) and heading in the map frame
+# [m, rad], size width x height [m] and cells of resolution [m].
+/ssl/ssl_simulator:
+  ros__parameters:
+    node_id: 1
+    x: 205.0
+    y: 27.92
+    z: 0.011
+    heading: 0.0
+    width: 8.64
+    height: 17.28
+    resolution: 0.2
+    threshold: 10
+    stale_seconds: 0.5
+    microscale: false

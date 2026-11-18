@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_visualization)/config/object_list.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="node_name" default="object_list_marker_array" description="Name of the node."/>
+  <arg name="input_topic" default="object_list" description="Visualized ufil_msgs/ObjectList."/>
+  <arg name="output_topic" default="object_markers" description="Published object markers."/>
+
+  <node pkg="ufil_visualization" exec="object_list_marker_array_node" name="$(var node_name)"
+    namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/object_list.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="object_list" to="$(var input_topic)"/>
+    <remap from="object_markers" to="$(var output_topic)"/>
+  </node>
+</launch>

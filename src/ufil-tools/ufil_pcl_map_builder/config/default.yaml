@@ -1,0 +1,19 @@
+# Default parameters of the ufil_pcl_map_builder node (PclMapBuilderNode).
+/**:
+  ros__parameters:
+    # Fixed at startup.
+    # Geographic origin of the local metric frame the clicked points are given in
+    # (University of Alberta test site).
+    origin:
+      latitude: 53.528321801207966
+      longitude: -113.53042672991906
+    # Selectable point types; the number keys 1..n select them in an interactive terminal.
+    point_types: [curb, tree, sign]
+    # OSM file the map is written to, relative to the working directory of the node.
+    output_file: clicked_points.osm
+    # Write the map after every clicked point. Otherwise it is written on shutdown.
+    autosave: true
+
+    # Can be changed at runtime with `ros2 param set`.
+    # Type assigned to the next clicked point, one of point_types.
+    point_type: curb

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ssl_wheel_tracker</name>
+  <version>0.2.0</version>
+  <description>
+    Wheel detection and tracking for the sensitive surface layer (SSL), a pressure-sensitive mat
+    in the road surface. Detects wheel contacts as local pressure maxima in the pressure grids of
+    one or more mats and tracks them with constant velocity Kalman filters, global nearest
+    neighbour association and multi-hit track confirmation. Provides a ROS-independent core
+    library and the ROS 2 component ssl_wheel_tracker::SslWheelTrackerNode. Replaces the Python
+    packages ssl_wheel_detection and ssl_wheel_tracking.
+  </description>
+  <maintainer email="schaefer@embedded.rwth-aachen.de">Simon Schäfer</maintainer>
+  <license>MIT</license>
+  <author email="hendrik.steidl@rwth-aachen.de">Hendrik Steidl</author>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+
+  <!-- Core library -->
+  <depend>eigen</depend>
+  <depend>ufil_object_tracking</depend>
+
+  <!-- ROS 2 component -->
+  <depend>builtin_interfaces</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>diagnostic_updater</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>ssl_vehicle_tracking_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_xml</exec_depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>class_loader</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

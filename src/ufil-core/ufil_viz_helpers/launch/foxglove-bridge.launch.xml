@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- Foxglove WebSocket bridge, e.g. to view UFIL topics in Foxglove Studio. -->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="port" default="8765" description="WebSocket port of the bridge."/>
+
+  <include file="$(find-pkg-share foxglove_bridge)/launch/foxglove_bridge_launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="port" value="$(var port)"/>
+  </include>
+</launch>

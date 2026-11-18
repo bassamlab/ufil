@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+  Compatibility wrapper around default.launch.xml with the former prefixed argument names. The
+  group keeps the arguments of default.launch.xml from leaking into the including launch file.
+-->
+<launch>
+  <arg name="pedestrian_simulator_use_sim_time" default="false"
+    description="Use the /clock topic as time source."/>
+  <arg name="pedestrian_simulator_namespace" default="ufil_examples_pedestrian"
+    description="Namespace of the simulator node."/>
+  <arg name="pedestrian_simulator_scenario" default="crossing.yaml"
+    description="Scenario file name in pedestrian_simulator_scenario_directory (appearing.yaml, clutter.yaml, crossing.yaml, crowd.yaml, group.yaml, occlusion.yaml, overtaking.yaml, parallel.yaml, passing.yaml, waiting.yaml)."/>
+  <arg name="pedestrian_simulator_scenario_directory"
+    default="$(find-pkg-share ufil_examples_pedestrian_simulator)/config"
+    description="Directory containing the scenario files."/>
+  <arg name="pedestrian_simulator_measured_topic" default="measured_objects"
+    description="Output topic for noisy measured objects."/>
+  <arg name="pedestrian_simulator_reference_topic" default="reference_objects"
+    description="Output topic for ground-truth reference objects."/>
+
+  <group>
+    <include file="$(find-pkg-share ufil_examples_pedestrian_simulator)/launch/default.launch.xml">
+      <arg name="use_sim_time" value="$(var pedestrian_simulator_use_sim_time)"/>
+      <arg name="namespace" value="$(var pedestrian_simulator_namespace)"/>
+      <arg name="scenario"
+        value="$(var pedestrian_simulator_scenario_directory)/$(var pedestrian_simulator_scenario)"/>
+      <arg name="measured_topic" value="$(var pedestrian_simulator_measured_topic)"/>
+      <arg name="reference_topic" value="$(var pedestrian_simulator_reference_topic)"/>
+    </include>
+  </group>
+</launch>

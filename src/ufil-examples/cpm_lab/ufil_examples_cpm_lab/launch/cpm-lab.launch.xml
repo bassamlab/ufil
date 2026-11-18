@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+  CPM Lab example on a single machine: head and headless with the overrides of
+  config/cpm-lab_local.yaml (e.g. the CAMs are sent to the local RSU).
+-->
+<launch>
+  <arg name="use_sim_time" default="true" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_examples_cpm_lab)/config/cpm-lab.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file"
+    default="$(find-pkg-share ufil_examples_cpm_lab)/config/cpm-lab_local.yaml" description="Single-machine overrides of params_file."/>
+
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm-lab_head.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="local_params_file" value="$(var local_params_file)"/>
+  </include>
+  <include file="$(find-pkg-share ufil_examples_cpm_lab)/launch/cpm-lab_headless.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="local_params_file" value="$(var local_params_file)"/>
+  </include>
+</launch>

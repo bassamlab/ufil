@@ -1,0 +1,21 @@
+# Default parameters of ssl_vehicle_tracking::SslVehicleTrackingNode. All parameters are read-only.
+/**:
+  ros__parameters:
+    # Vehicle template files; a file name without directory is taken from the templates
+    # directory of this package (car_carla, motorcycle_carla, muCar_lab, muCar_scaled_lab,
+    # truck_carla).
+    vehicle_templates: ["muCar_scaled_lab.json"]
+
+    # Maximum deviation of a wheel track from its expected position in the vehicle [m].
+    search_width: 0.9
+    # Wheel pairs (longest first) used to estimate the vehicle rotation.
+    considered_rotation_pairs: 2
+    # Wheels and vehicles below this probability are dropped.
+    dropping_threshold: 0.05
+    # Only vehicles above this existence probability are published.
+    publishing_threshold: 0.0
+
+    # Declared by diagnostic_updater::Updater.
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

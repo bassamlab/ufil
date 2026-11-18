@@ -1,0 +1,47 @@
+# Stop-and-go: two pedestrians walk to the curb, wait (6 s and 3 s), then cross the major
+# road on the crosswalks while a third walks past without stopping.
+# Tracker challenge: zero velocity while standing, then accelerating again.
+name: waiting
+runtime: 37
+error_covariance: 0.1
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 12.5]
+        time: 0
+      - position: [16.5, 12.5]
+        time: 11.43
+      - position: [16.5, 13.4]
+        time: 12.07
+      - position: [16.5, 13.4]
+        time: 18.07
+      - position: [16.5, 39.5]
+        time: 36.71
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [39.5, 13.5]
+        time: 0
+      - position: [24.5, 13.5]
+        time: 10.71
+      - position: [24.5, 13.5]
+        time: 13.71
+      - position: [24.5, 39.5]
+        time: 32.29
+  - id: 3
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 39.5]
+        time: 0
+      - position: [23.5, 0.5]
+        time: 27.86

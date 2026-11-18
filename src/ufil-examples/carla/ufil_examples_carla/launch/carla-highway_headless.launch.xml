@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+  Headless machine of the CARLA highway example: outdoor sensor node, sensitive surface
+  layer and the road side unit, which receives the CAMs of the vehicles and fuses all
+  objects.
+  All parameters are in config/carla-highway.yaml.
+-->
+<launch>
+  <arg name="use_sim_time" default="true"
+    description="Use the /clock topic of the CARLA ROS bridge."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_carla)/config/carla-highway.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file" default="$(var params_file)"
+    description="Machine-specific overrides of params_file."/>
+
+  <set_parameter name="use_sim_time" value="$(var use_sim_time)"/>
+
+  <!-- Outdoor sensor node: point cloud preprocessing and object tracking -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="osn" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/highway.urdf.xml')"/>
+  </node>
+  <node_container pkg="rclcpp_components" exec="component_container" name="osn_container"
+    namespace="osn" output="screen">
+    <composable_node pkg="ufil_pcl_preprocessor" plugin="ufil_pcl_preprocessor::PclPreprocessorNode"
+      name="ufil_pcl_preprocessor" namespace="osn">
+      <param from="$(find-pkg-share ufil_pcl_preprocessor)/config/default.yaml"/>
+      <param from="$(var params_file)" allow_substs="true"/>
+      <param from="$(var local_params_file)" allow_substs="true"/>
+      <remap from="input_cloud" to="/carla/lidar"/>
+      <extra_arg name="use_intra_process_comms" value="true"/>
+    </composable_node>
+    <composable_node pkg="ufil_osn_tracker" plugin="ufil_osn_tracker::OsnTrackerNode"
+      name="ufil_osn_tracker" namespace="osn">
+      <param from="$(find-pkg-share ufil_osn_tracker)/config/default.yaml"/>
+      <param from="$(var params_file)" allow_substs="true"/>
+      <param from="$(var local_params_file)" allow_substs="true"/>
+      <extra_arg name="use_intra_process_comms" value="true"/>
+    </composable_node>
+  </node_container>
+
+  <!-- Sensitive surface layer: wheel and vehicle tracking of the mat /ssl/ssl_1 -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="ssl" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/utm_32n.urdf.xml')"/>
+  </node>
+  <node pkg="ssl_wheel_tracker" exec="ssl_wheel_tracker_node"
+    name="ssl_wheel_tracker" namespace="ssl" output="screen">
+    <param from="$(find-pkg-share ssl_wheel_tracker)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+  </node>
+  <node pkg="ssl_vehicle_tracking" exec="ssl_vehicle_tracking_node"
+    name="ssl_vehicle_tracking" namespace="ssl" output="screen">
+    <param from="$(find-pkg-share ssl_vehicle_tracking)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="vehicles" to="object_list"/>
+  </node>
+
+  <!-- Road side unit: CAM reception (UDP -> ETSI decoding -> objects) and central fusion -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="rsu" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_carla)/urdf/utm_32n.urdf.xml')"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_receive_node"
+    name="udp_receiver" namespace="rsu/cam" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_output" to="udp"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_decoder" namespace="rsu/cam" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/udp/in" to="udp"/>
+    <remap from="~/cam/out" to="cam"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_receiver_node"
+    name="vehicle_cam_receiver_node" namespace="rsu/cam" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_receiver.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+  </node>
+  <node pkg="ufil_central_fusion" exec="central_fusion_node"
+    name="central_fusion" namespace="rsu" output="screen">
+    <param from="$(find-pkg-share ufil_central_fusion)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object_list" to="object_list_unfiltered"/>
+  </node>
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="rsu" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="object_list_unfiltered"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+</launch>

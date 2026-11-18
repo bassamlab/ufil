@@ -1,0 +1,31 @@
+{
+    "length": 7.935710430145264,
+    "width": 2.8910882472991943,
+    "classification": 1,
+    "axles": [
+        {
+            "single_track": false,
+            "track_width": 2.8910882472991943,
+            "track_width_variance": 1e-9,
+            "center_to_axle": 3.96785521507,
+            "center_to_axle_variance": 1e-9,
+            "wheel_detected": [true, true]
+        },
+        {
+            "single_track": false,
+            "track_width": 2.8910882472991943,
+            "track_width_variance": 1e-9,
+            "center_to_axle": -2.77749865055,
+            "center_to_axle_variance": 1e-9,
+            "wheel_detected": [true, true, true, true]
+        },
+        {
+            "single_track": false,
+            "track_width": 2.8910882472991943,
+            "track_width_variance": 1e-9,
+            "center_to_axle": -3.96785521507,
+            "center_to_axle_variance": 1e-9,
+            "wheel_detected": [true, true, true, true]
+        }
+    ]
+}

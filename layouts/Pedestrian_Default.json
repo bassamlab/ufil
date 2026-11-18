@@ -1,0 +1,220 @@
+{
+  "configById": {
+    "DiagnosticSummary!3t91hw0": {
+      "minLevel": 0,
+      "pinnedIds": [],
+      "hardwareIdFilter": "",
+      "topicToRender": "/diagnostics",
+      "sortByLevel": true
+    },
+    "DiagnosticStatusPanel!ut0h9g": {
+      "selectedHardwareId": "pedestrian_tracker",
+      "selectedName": "/osn/pedestrian_tracker: Pedestrian tracker",
+      "topicToRender": "/diagnostics",
+      "collapsedSections": []
+    },
+    "3D!18i6zy7": {
+      "layers": {
+        "845139cb-26bc-40b3-8161-8ab60af4baf5": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Grid",
+          "instanceId": "845139cb-26bc-40b3-8161-8ab60af4baf5",
+          "layerId": "foxglove.Grid",
+          "divisions": 40,
+          "lineWidth": 1,
+          "color": "#00000033",
+          "position": [
+            20,
+            20,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "order": 1,
+          "size": 40
+        }
+      },
+      "cameraState": {
+        "perspective": true,
+        "distance": 45.124999999994884,
+        "phi": 30.500695410292025,
+        "thetaOffset": 0,
+        "targetOffset": [
+          20.039845780363375,
+          16.552154784223468,
+          -3.114576199692557e-14
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {
+        "transforms": {
+          "labelSize": 1,
+          "editable": false,
+          "enablePreloading": false,
+          "axisScale": 10,
+          "showLabel": false
+        }
+      },
+      "transforms": {
+        "frame:map": {
+          "visible": false
+        },
+        "frame:rgb_view_left": {
+          "visible": false
+        },
+        "frame:rgb_view_right": {
+          "visible": false
+        },
+        "frame:sensor_node_base": {
+          "visible": true
+        },
+        "frame:sensor_node": {
+          "visible": false
+        },
+        "frame:ssl_frame_1": {
+          "visible": true
+        },
+        "frame:lidar": {
+          "visible": true
+        },
+        "frame:map_utm": {
+          "visible": false
+        },
+        "frame:utm_32n": {
+          "visible": false
+        },
+        "frame:l515_link": {
+          "visible": true
+        }
+      },
+      "topics": {
+        "/obu/object_markers": {
+          "visible": true
+        },
+        "/osn/object_markers": {
+          "visible": true
+        },
+        "/osn/dynamic_cloud": {
+          "visible": true,
+          "colorField": "z",
+          "colorMode": "colormap",
+          "colorMap": "turbo"
+        },
+        "/rsu/object_markers": {
+          "visible": true
+        },
+        "/ssl/ssl_1/map": {
+          "visible": true
+        },
+        "/rsu/cam/object_markers": {
+          "visible": true
+        },
+        "/carla/lidar": {
+          "visible": true,
+          "colorField": "intensity",
+          "colorMode": "colormap",
+          "colorMap": "turbo",
+          "pointShape": "circle"
+        },
+        "/rsu/dynamic_occlusion_grid": {
+          "visible": false
+        },
+        "/osn/dynamic_occlusion_grid": {
+          "visible": true,
+          "frameLocked": false,
+          "colorMode": "costmap"
+        },
+        "/osn/filter_viz": {
+          "visible": true
+        },
+        "/ssl/object_markers": {
+          "visible": true
+        },
+        "/ssl_1": {
+          "visible": true
+        },
+        "/ssl_2": {
+          "visible": true
+        },
+        "/map": {
+          "visible": true
+        },
+        "/ufil_examples_pedestrian/measured_markers": {
+          "visible": false
+        },
+        "/ufil_examples_pedestrian/reference_markers": {
+          "visible": true,
+          "namespaces": {
+            "body": {
+              "visible": false
+            },
+            "covariance_orientation": {
+              "visible": false
+            },
+            "covariance_position": {
+              "visible": false
+            },
+            "label": {
+              "visible": false
+            },
+            "velocity": {
+              "visible": false
+            }
+          }
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "RosOut!3jta0ed": {
+      "searchTerms": [],
+      "minLogLevel": 1
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "row",
+    "first": {
+      "direction": "column",
+      "second": "DiagnosticStatusPanel!ut0h9g",
+      "first": "DiagnosticSummary!3t91hw0"
+    },
+    "second": {
+      "first": "3D!18i6zy7",
+      "second": "RosOut!3jta0ed",
+      "direction": "column",
+      "splitPercentage": 65.5126498002663
+    },
+    "splitPercentage": 27.314814814814813
+  }
+}

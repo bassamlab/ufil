@@ -1,0 +1,34 @@
+# Default parameters of the ufil_osn_classifier node (YoloClassifier).
+#
+# model_file is not listed here: its default is resolved at runtime to
+# <share of ufil_osn_classifier>/models/yolo11s.engine. Set it in a params_file to use
+# another model, e.g. the also installed models/yolo11s.pt when TensorRT is not available.
+/**:
+  ros__parameters:
+    # Fixed at startup.
+    track_input: osn/object_list
+    track_output: osn/classified_object_list
+    # One entry per camera: [right, left].
+    camera_input_topics:
+      - /camera_right/image_rect/compressed
+      - /camera_left/image_rect/compressed
+    camera_output_topics:
+      - /annot_right/image_rect/compressed
+      - /annot_left/image_rect/compressed
+    camera_info_topics:
+      - /camera_right/camera_info
+      - /camera_left/camera_info
+    target_frame: m1
+    # Ultralytics task passed to YOLO() together with model_file.
+    task: classify
+    # Homogeneous 4x4 lidar-to-camera transforms as nested list literal strings.
+    T_camera_right_lidar: "[[-0.26207, 0.96484, 0.01995, -0.29462], [0.07057, -0.00146, 0.99751, 0.20912], [0.96247, 0.26282, -0.06771, 0.97677], [0.00000, 0.00000, 0.00000, 1.00000]]"
+    T_camera_left_lidar: "[[0.26207, 0.96484, -0.01995, -0.29462], [0.07056, 0.00146, 0.99751, 0.20912], [0.96247, -0.26283, -0.06770, 0.97677], [0.00000, 0.00000, 0.00000, 1.00000]]"
+
+    # Read on every object list.
+    # Weight of the tracker classification in the fusion.
+    tracker_trust: 0.2
+    # Weight of each camera classification in the fusion.
+    camera_trust: 0.4
+    # Exponential smoothing factor of the fused classification over time.
+    smoothing_factor: 0.1

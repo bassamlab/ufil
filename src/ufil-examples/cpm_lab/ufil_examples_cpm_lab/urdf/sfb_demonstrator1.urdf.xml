@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot name="sfb-demonstrator">
+  <link name="map"></link>
+  <link name="lab"></link>
+  <link name="ssl_frame_1"></link>
+  <link name="ssl_frame_2"></link>
+  <link name="sensor_node_base"></link>
+  <link name="sensor_node"></link>
+  <link name="l515_link"></link>
+  <link name="aoi1"></link>
+  <link name="aoi2"></link>
+  <link name="aoi3"></link>
+  <link name="aoi4"></link>
+
+  <joint name="map_to_lab" type="fixed">
+    <parent link="map" />
+    <child link="lab" />
+    <origin xyz="81 71.9 0" rpy="0 0 3.141592654" />
+  </joint>
+
+  <joint name="map_to_sensor_node_base" type="fixed">
+    <parent link="map" />
+    <child link="sensor_node_base" />
+    <origin xyz="10.5 48 0" rpy="0 0 -2.3" />
+  </joint>
+  <joint name="map_to_ssl_frame_2" type="fixed">
+    <parent link="map" />
+    <child link="ssl_frame_2" />
+    <origin xyz="43 43 0.3" rpy="0 0 -1.570796327" />
+  </joint>
+
+  <joint name="map_to_ssl_frame_1" type="fixed">
+    <parent link="map" />
+    <child link="ssl_frame_1" />
+    <origin xyz="34.3 43 0.3" rpy="0 0 -1.570796327" />
+  </joint>
+
+  <joint name="sensor_node_base_to_sensor_node" type="fixed">
+    <parent link="sensor_node_base"/>
+    <child link="sensor_node"/>
+    <origin xyz="0 0 6.5" rpy="3.141592654 0.436332313 1.570796327"/>
+  </joint>
+
+  <joint name="sensor_node_to_l515_link" type="fixed">
+    <parent link="sensor_node"/>
+    <child link="l515_link"/>
+    <origin xyz="0 0 0" rpy="3.141592654 0 0"/>
+  </joint>
+
+  <joint name="map_to_aoi1" type="fixed">
+    <parent link="map" />
+    <child link="aoi1" />
+    <origin xyz="0.0 30.0 0.0" rpy="0 0 0" />
+  </joint>
+
+  <joint name="map_to_aoi2" type="fixed">
+    <parent link="map" />
+    <child link="aoi2" />
+    <origin xyz="0.0 46.0 0.0" rpy="0 0 -1.570796327" />
+  </joint>
+
+  <joint name="map_to_aoi3" type="fixed">
+    <parent link="map" />
+    <child link="aoi3" />
+    <origin xyz="81.0 46.0 0.0" rpy="0 0 3.141592654" />
+  </joint>
+
+  <joint name="map_to_aoi4" type="fixed">
+    <parent link="map" />
+    <child link="aoi4" />
+    <origin xyz="81.0 30.0 0.0" rpy="0 0 1.570796327" />
+  </joint>
+</robot>

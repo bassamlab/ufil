@@ -1,0 +1,27 @@
+# Default parameters of ufil_examples_cpm_lab_adapter::CpmLabSensorNode. All parameters are
+# read-only. Remap vehicle_state to the state topic of the vehicle, e.g.
+# /lab/vehicle_1/vehicleState.
+/**:
+  ros__parameters:
+    # Id of the CPM Lab vehicle; the frames are suffixed with it (base_link_1, imu_1, ...).
+    vehicle_id: 1
+
+    # Frame whose origin is at the GNSS origin.
+    target_frame: map
+
+    gnss:
+      frequency: 5.0
+      artificial_errors: true
+      # WGS84 position of the origin of target_frame: the CPM Lab.
+      origin:
+        latitude: 48.079772
+        longitude: 11.635734
+
+    # Rate of the IMU and wheel odometry messages.
+    odometry:
+      frequency: 50.0
+
+    diagnostic_updater:
+      period: 1.0
+      # Prefix diagnostic names with the node namespace to tell multiple vehicles apart.
+      use_fqn: true

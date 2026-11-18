@@ -1,0 +1,20 @@
+# Default parameters of ufil_mqtt::MqttMessageConverterNode. All parameters are read-only.
+# The input topic is "input"; remap it to the forwarded topic.
+/**:
+  ros__parameters:
+    # object_list (ufil_msgs/msg/ObjectList) or occupancy_grid (nav_msgs/msg/OccupancyGrid).
+    message_type: object_list
+
+    broker:
+      protocol: tcp
+      host: localhost
+      port: 1883
+      # Empty: the fully qualified node name.
+      client_id: ""
+      reconnect_interval: 2.0
+
+    mqtt_topic: ufil/object_list
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

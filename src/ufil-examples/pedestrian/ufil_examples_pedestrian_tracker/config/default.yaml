@@ -1,0 +1,14 @@
+# Default parameters of ufil_examples_pedestrian_tracker::PedestrianTrackerNode. All parameters
+# are read-only.
+/**:
+  ros__parameters:
+    # Process noise of the random walk motion model, per axis.
+    process_noise: 10.0
+    # Tracks without an associated detection for this long are deleted [s].
+    track_timeout: 1.0
+    # A larger gap between two detection stamps, or a jump back in time, resets the tracker [s].
+    max_time_gap: 1.0
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

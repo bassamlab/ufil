@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<!--
+  Head machine of the CPM Lab example: on-board units of the lab vehicles, which send their
+  objects as CAM to the headless machine, and the visualization.
+  All parameters are in config/cpm-lab.yaml.
+-->
+<launch>
+  <arg name="use_sim_time" default="true" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_examples_cpm_lab)/config/cpm-lab.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file" default="$(var params_file)"
+    description="Machine-specific overrides of params_file."/>
+
+  <set_parameter name="use_sim_time" value="$(var use_sim_time)"/>
+
+  <!-- Visualization -->
+  <node pkg="ufil_visualization" exec="object_list_marker_array_node"
+    name="object_list_marker_array" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/object_list.yaml"/>
+    <param from="$(find-pkg-share ufil_visualization)/config/ufil_sources.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+  </node>
+  <node pkg="ufil_visualization" exec="lanelet_map_marker_array_node"
+    name="lanelet_map_marker_array_node" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/lanelet_map.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="map_markers" to="map"/>
+  </node>
+
+  <!-- All lab vehicles in /obu, limited to the lab area -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="obu" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_cpm_lab)/urdf/utm_32n.urdf.xml')"/>
+  </node>
+  <node pkg="ufil_examples_cpm_lab_adapter" exec="ufil_examples_cpm_lab_adapter_node"
+    name="cpm_lab_adapter" namespace="obu" output="screen">
+    <param from="$(find-pkg-share ufil_examples_cpm_lab_adapter)/config/cpm_lab_adapter.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object_list" to="object_list_unfiltered"/>
+  </node>
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="object_list_unfiltered"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+
+  <!-- On-board unit of vehicle 19: /obu/vehicle_19/object_list -> filter -> CAM -> UDP -->
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu_19" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/obu/vehicle_19/object_list"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node"
+    name="vehicle_cam_generator_node" namespace="obu_19" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object" to="object_list"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_encoder" namespace="obu_19" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/cam/in" to="cam"/>
+    <remap from="~/udp/out" to="udp"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="obu_19" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_input" to="udp"/>
+  </node>
+
+  <!-- On-board unit of vehicle 18: /obu/vehicle_18/object_list -> filter -> CAM -> UDP -->
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu_18" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/obu/vehicle_18/object_list"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node"
+    name="vehicle_cam_generator_node" namespace="obu_18" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object" to="object_list"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_encoder" namespace="obu_18" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/cam/in" to="cam"/>
+    <remap from="~/udp/out" to="udp"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="obu_18" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_input" to="udp"/>
+  </node>
+
+  <!-- On-board unit of vehicle 17: /obu/vehicle_17/object_list -> filter -> CAM -> UDP -->
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu_17" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/obu/vehicle_17/object_list"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node"
+    name="vehicle_cam_generator_node" namespace="obu_17" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object" to="object_list"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_encoder" namespace="obu_17" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/cam/in" to="cam"/>
+    <remap from="~/udp/out" to="udp"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="obu_17" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_input" to="udp"/>
+  </node>
+
+  <!-- On-board unit of vehicle 15: /obu/vehicle_15/object_list -> filter -> CAM -> UDP -->
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu_15" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/obu/vehicle_15/object_list"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node"
+    name="vehicle_cam_generator_node" namespace="obu_15" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object" to="object_list"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_encoder" namespace="obu_15" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/cam/in" to="cam"/>
+    <remap from="~/udp/out" to="udp"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="obu_15" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_input" to="udp"/>
+  </node>
+
+  <!-- On-board unit of vehicle 13: /obu/vehicle_13/object_list -> filter -> CAM -> UDP -->
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu_13" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/obu/vehicle_13/object_list"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node"
+    name="vehicle_cam_generator_node" namespace="obu_13" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object" to="object_list"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_encoder" namespace="obu_13" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/cam/in" to="cam"/>
+    <remap from="~/udp/out" to="udp"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="obu_13" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_input" to="udp"/>
+  </node>
+
+  <!-- On-board unit of vehicle 12: /obu/vehicle_12/object_list -> filter -> CAM -> UDP -->
+  <node pkg="ufil_message_filter" exec="object_list_position_filter_node"
+    name="object_list_position_filter" namespace="obu_12" output="screen">
+    <param from="$(find-pkg-share ufil_message_filter)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="objects" to="/obu/vehicle_12/object_list"/>
+    <remap from="objects_filtered" to="object_list"/>
+  </node>
+  <node pkg="ufil_etsi" exec="vehicle_cam_generator_node"
+    name="vehicle_cam_generator_node" namespace="obu_12" output="screen">
+    <param from="$(find-pkg-share ufil_etsi)/config/vehicle_cam_generator.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="object" to="object_list"/>
+  </node>
+  <node pkg="etsi_its_conversion" exec="etsi_its_conversion_node"
+    name="cam_encoder" namespace="obu_12" output="screen">
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="~/cam/in" to="cam"/>
+    <remap from="~/udp/out" to="udp"/>
+  </node>
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="obu_12" output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="udp_input" to="udp"/>
+  </node>
+</launch>

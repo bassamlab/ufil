@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+  CARLA highway example on a single machine: head and headless with the overrides of
+  config/carla-highway_local.yaml (the CAMs are sent to the local RSU).
+-->
+<launch>
+  <arg name="use_sim_time" default="true"
+    description="Use the /clock topic of the CARLA ROS bridge."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_carla)/config/carla-highway.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file"
+    default="$(find-pkg-share ufil_examples_carla)/config/carla-highway_local.yaml"
+    description="Single-machine overrides of params_file."/>
+
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/carla-highway_head.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="local_params_file" value="$(var local_params_file)"/>
+  </include>
+  <include file="$(find-pkg-share ufil_examples_carla)/launch/carla-highway_headless.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="params_file" value="$(var params_file)"/>
+    <arg name="local_params_file" value="$(var local_params_file)"/>
+  </include>
+</launch>

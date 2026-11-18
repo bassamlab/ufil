@@ -1,0 +1,15 @@
+# Default parameters of ufil_etsi::VehicleCamGeneratorNode. All parameters are read-only.
+/**:
+  ros__parameters:
+    # UTM frame the objects are transformed into, the CAM position is computed in its zone.
+    target_frame: utm_32n
+    # Index of the own vehicle in the received object lists.
+    object_array_index: 0
+    # ETSI TS 102 894-2 DE_VehicleRole, 0 is the default role.
+    vehicle_role: 0
+    # Shift of the ROS time for the ETSI timestamps [ns], same value as on the receiver.
+    time_shift_nanosec: 0
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

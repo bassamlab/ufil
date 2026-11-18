@@ -1,0 +1,23 @@
+# Default parameters of ufil_examples_cpm_lab_adapter::CpmLabAdapterNode. All parameters are
+# read-only. Each vehicle is published alone on vehicle_<id>/object_list, and all vehicles
+# together on object_list.
+/**:
+  ros__parameters:
+    # Ids of the CPM Lab vehicles, also used as object ids.
+    vehicle_ids: [1]
+    # State topic of each vehicle; {id} is replaced by the vehicle id.
+    vehicle_state_topic: /lab/vehicle_{id}/vehicleState
+
+    # The vehicle states are given in source_frame, the object lists are published in
+    # target_frame.
+    source_frame: lab
+    target_frame: map
+
+    # Rate [Hz] of the object list with all vehicles. Vehicles without a state for
+    # state_timeout [s] are left out of it.
+    publish_rate: 20.0
+    state_timeout: 0.5
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

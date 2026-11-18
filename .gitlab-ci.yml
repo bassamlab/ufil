@@ -1,0 +1,182 @@
+workflow:
+  rules:
+    # dev and main always get branch pipelines: the release waits for them and runs on dev while
+    # its dev -> main merge request is open. That merge request gets no duplicate MR pipeline.
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "dev"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main"
+    # Avoid duplicate pipelines: run MR pipelines for branches with an open MR, branch pipelines otherwise
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+stages:
+  - release
+  - build-test
+  - sync-github
+
+default:
+  # The group runners do not pick up untagged jobs. `docker` selects the two Docker-executor
+  # runners (cpm-buildfarm-amd64 / -arm64) and excludes the shell runner; all images are multi-arch.
+  tags:
+    - docker
+
+variables:
+  # Same base image as docker/Dockerfile (ROS_IMAGE); keep the digests in sync
+  ROS_IMAGE: ros:jazzy@sha256:8eed0a4669bbf43ee331878a4c39bd8ebddea8e3312a58b4fae8edb14526b617
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_FORCE_HTTPS: "true"
+  PIP_BREAK_SYSTEM_PACKAGES: "1"
+  GITHUB_MIRROR_BRANCH: main
+  # Releases: run a pipeline on dev from the GitLab UI (Build > Pipelines > Run pipeline) with
+  # RELEASE_VERSION set, e.g. 0.2.0. Set DRY_RUN to "true" to only check. See ci/release.py.
+  RELEASE_VERSION:
+    value: ""
+    description: "Version to release, e.g. 0.2.0. Leave empty for a normal pipeline."
+  DRY_RUN:
+    value: "false"
+    description: "true: only check that everything is ready to release, change nothing."
+
+.not-on-tags:
+  interruptible: true
+  rules:
+    - if: $CI_COMMIT_TAG || $RELEASE_VERSION
+      when: never
+    - when: on_success
+
+# ---------------------------------------------------------------------------
+# Stage 1 – Build and test the ROS workspace
+#
+# There is no container registry, so the jobs start from the plain ROS base image and install
+# the workspace dependencies with the same scripts that docker/Dockerfile uses.
+# ---------------------------------------------------------------------------
+.workspace-deps:
+  image: $ROS_IMAGE
+  before_script:
+    - docker/install-system.sh
+    - docker/install-python.sh
+
+build-test:
+  extends: [.not-on-tags, .workspace-deps]
+  stage: build-test
+  before_script:
+    - !reference [.workspace-deps, before_script]
+    - source /opt/ros/jazzy/setup.bash
+  script:
+    # One package at a time like `make sequential` (but with tests): building packages in
+    # parallel gets the compiler OOM-killed on heavy packages such as ufil_osn_tracker.
+    - python3 -m colcon build
+        --base-paths ./src/
+        --parallel-workers 1
+        --cmake-args
+          "-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
+          "-DCMAKE_BUILD_TYPE=Release"
+          "-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Wno-psabi"
+          "-DCMAKE_CXX_FLAGS_RELEASE=-O2"
+          "-Wno-dev"
+    - source install/setup.bash
+    # carla_msgs is the external upstream package (ros-carla-msgs submodule); its tests are not ours.
+    - python3 -m colcon test --base-paths ./src/ --packages-skip carla_msgs
+        --return-code-on-test-failure && TEST_RC=0 || TEST_RC=$?
+    - python3 -m colcon test-result --verbose || true
+    - exit $TEST_RC
+  artifacts:
+    when: always
+    expire_in: 1 week
+    reports:
+      junit:
+        - build/*/test_results/*/*.xml
+        - build/*/pytest.xml
+
+rosdep-check:
+  extends: [.not-on-tags, .workspace-deps]
+  stage: build-test
+  script:
+    # Fails if a package.xml declares a dependency that docker/install-system.sh or docker/install-python.sh do not install.
+    - rosdep update --rosdistro jazzy
+    - rosdep check --from-paths src --ignore-src --rosdistro jazzy
+
+# ---------------------------------------------------------------------------
+# Release automation (ci/release.py). Needs the masked, protected CI/CD variable RELEASE_TOKEN:
+# a group access token of cas/project/simon/software with the Maintainer role and the api scope.
+# dev, main and the version tags (*.*.*) are protected, so the release and tag pipelines can
+# read it.
+# ---------------------------------------------------------------------------
+release-script-test:
+  stage: build-test
+  image: docker.io/library/python:3.12-slim
+  script:
+    - python3 -m unittest discover -s ci -v
+  rules:
+    - if: $RELEASE_VERSION || $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH || $CI_MERGE_REQUEST_IID
+      changes:
+        - ci/**/*
+
+# Checks all repos, finalises the changelogs, merges dev into main, tags and creates the GitLab
+# releases of the components, this workspace and the documentation, then waits until their tag
+# pipelines published the workspace and the documentation to GitHub. Safe to run again after a
+# failure.
+release:
+  stage: release
+  image: docker.io/library/python:3.12
+  resource_group: ufil-release
+  timeout: 6h
+  variables:
+    GIT_DEPTH: 1
+    GIT_SUBMODULE_STRATEGY: none
+    # Show the progress in the job log as it happens.
+    PYTHONUNBUFFERED: "1"
+  script:
+    - if [ "$DRY_RUN" = "true" ]; then command=check; else command=release; fi
+    - python3 ci/release.py "$command"
+  rules:
+    - if: $RELEASE_VERSION
+
+# ---------------------------------------------------------------------------
+# Stage 3 – Sync flattened workspace snapshot to GitHub on tag creation only
+# ---------------------------------------------------------------------------
+sync-github-mirror:
+  stage: sync-github
+  image: alpine:3.20
+  before_script:
+    - apk add --no-cache git openssh-client bash
+    - mkdir -p ~/.ssh
+    - printf '%s\n' "$GITHUB_MIRROR_DEPLOY_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>/dev/null
+  script:
+    - |
+      set -euo pipefail
+
+      # GitLab already checked out all submodules via GIT_SUBMODULE_STRATEGY: recursive.
+      # Copy the working tree instead of re-cloning (avoids needing GitLab SSH access).
+      cp -r "$CI_PROJECT_DIR" /tmp/mirror-src
+      cd /tmp/mirror-src
+
+      # Remove UofA-related paths recursively from the mirrored snapshot.
+      find src -depth -type d -iname '*uofa*' -exec rm -rf {} + || true
+
+      # Convert the checkout into a plain repository snapshot.
+      # Remove all .git metadata (root + all nested submodule .git dirs/files at any depth).
+      find . -name .git -exec rm -rf {} + || true
+      rm -f .gitmodules
+
+      git init
+      git config user.email "${GITHUB_MIRROR_USER_EMAIL:-ci-mirror@local}"
+      git config user.name "${GITHUB_MIRROR_USER_NAME:-CI Mirror}"
+      git add -A
+      git commit -m "$CI_COMMIT_TAG"
+      git branch -M "$GITHUB_MIRROR_BRANCH"
+
+      # Ensure the remote uses SSH even if GITHUB_MIRROR_URL is an HTTPS URL
+      SSH_MIRROR_URL=$(echo "$GITHUB_MIRROR_URL" | sed 's|https://github.com/|git@github.com:|')
+      git remote add origin "$SSH_MIRROR_URL"
+      git tag -f "$CI_COMMIT_TAG"
+      git push --force origin "$GITHUB_MIRROR_BRANCH"
+      git push --force origin "refs/tags/$CI_COMMIT_TAG"
+  rules:
+    - if: $CI_COMMIT_TAG

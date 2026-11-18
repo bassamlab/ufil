@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+  Head machine of the pedestrian example: transforms and visualization of the map, the ground
+  truth and detections of the simulator and the tracks of the outdoor sensor node.
+  All parameters are in config/pedestrian.yaml.
+-->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_pedestrian)/config/pedestrian.yaml"
+    description="Parameters of all nodes."/>
+  <arg name="local_params_file" default="$(var params_file)"
+    description="Machine-specific overrides of params_file."/>
+
+  <set_parameter name="use_sim_time" value="$(var use_sim_time)"/>
+
+  <!-- Transforms utm_32n -> map_utm -> map -> osn -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher"
+    namespace="osn" output="screen">
+    <param name="robot_description"
+      value="$(command 'cat $(find-pkg-share ufil_examples_pedestrian)/urdf/pedestrian_map.urdf.xml')"/>
+  </node>
+
+  <!-- Visualization -->
+  <node pkg="ufil_visualization" exec="lanelet_map_marker_array_node"
+    name="lanelet_map_marker_array" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/lanelet_map.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+    <remap from="map_markers" to="/map"/>
+  </node>
+  <node pkg="ufil_visualization" exec="object_list_marker_array_node"
+    name="object_list_marker_array" output="screen">
+    <param from="$(find-pkg-share ufil_visualization)/config/object_list.yaml"/>
+    <param from="$(find-pkg-share ufil_visualization)/config/ufil_sources.yaml"/>
+    <param from="$(var params_file)" allow_substs="true"/>
+    <param from="$(var local_params_file)" allow_substs="true"/>
+  </node>
+</launch>

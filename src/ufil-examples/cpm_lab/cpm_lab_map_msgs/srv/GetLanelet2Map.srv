@@ -1,0 +1,6 @@
+# Get the map as a cpm_lab_map_msgs/Lanelet2MapBin
+
+---
+# The current map hosted by this map service.
+
+Lanelet2MapBin map

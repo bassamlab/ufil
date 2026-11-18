@@ -1,0 +1,34 @@
+# Default parameters of ufil_pcl_preprocessor::PclPreprocessorNode.
+/**:
+  ros__parameters:
+    # Frames, fixed at startup.
+    target_frame: sensor_node_base
+    sensor_frame: sensor_node
+    restamp_output: false
+    # CSV file with static areas (x, y, z, yaw, length, width, height); empty disables clipping.
+    static_object_file: ""
+
+    filter:
+      voxel_size: 0.1
+      outlier_radius: 0.5
+      min_neighbors: 40
+      z_min: 0.2
+      z_max: 5.0
+
+    fov:
+      num_bins: 150
+      history_length: 60
+      max_range: 32.0
+
+    occlusion_grid:
+      min_range: 5.0
+      max_range: 44.0
+      resolution: 0.4
+      size_x: 80.0
+      size_y: 80.0
+      decay_rate: 0.8
+
+    diagnostic_updater:
+      period: 1.0
+      # Prefix diagnostic names with the node namespace to tell multiple sensor nodes apart.
+      use_fqn: true

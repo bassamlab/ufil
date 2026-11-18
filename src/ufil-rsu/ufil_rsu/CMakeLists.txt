@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.8)
+project(ufil_rsu VERSION 0.2.0)
+
+find_package(ament_cmake REQUIRED)
+
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+
+  find_package(launch_testing_ament_cmake REQUIRED)
+  add_launch_test(test/test_rsu_launch.py TIMEOUT 120)
+endif()
+
+ament_package()

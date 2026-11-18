@@ -1,0 +1,35 @@
+# Missed detections: pedestrian 1 is not detected for 3 s in the middle of the west
+# crosswalk (e.g. hidden behind a bus). On top, every detection is missed with 15 %
+# probability.
+# Tracker challenge: coasting through gaps without losing or swapping tracks.
+name: occlusion
+runtime: 31
+error_covariance: 0.1
+seed: 7
+detection_probability: 0.85
+agents:
+  - id: 1
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [0.5, 12.5]
+        time: 0
+      - position: [16.5, 12.5]
+        time: 11.43
+      - position: [16.5, 39.5]
+        time: 30.71
+    occlusions:
+      - start: 15.4
+        end: 18.4
+  - id: 2
+    dimension:
+      width: 1.0
+      length: 1.0
+      height: 1.0
+    waypoints:
+      - position: [23.5, 39.5]
+        time: 0
+      - position: [23.5, 0.5]
+        time: 27.86

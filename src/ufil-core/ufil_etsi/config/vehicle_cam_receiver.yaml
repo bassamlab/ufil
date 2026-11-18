@@ -1,0 +1,11 @@
+# Default parameters of ufil_etsi::VehicleCamReceiverNode. All parameters are read-only.
+/**:
+  ros__parameters:
+    # Frame the objects of the received CAMs are published in.
+    target_frame: map
+    # Shift of the ROS time for the ETSI timestamps [ns], same value as on the sender.
+    time_shift_nanosec: 0
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

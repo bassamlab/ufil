@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+  Compatibility wrapper around object_list.launch.xml for launch files that include several
+  ufil_visualization nodes. The prefixed argument names avoid clashes between them; the group
+  keeps the arguments of object_list.launch.xml from leaking into the including launch file.
+-->
+<launch>
+  <arg name="object_list_marker_array_use_sim_time" default="true"
+    description="Use the /clock topic as time source."/>
+  <arg name="object_list_marker_array_namespace" default="" description="Namespace of the node."/>
+  <arg name="object_list_marker_array_input_topic" default="objects"
+    description="Visualized ufil_msgs/ObjectList."/>
+  <arg name="object_list_marker_array_output_topic" default="object_markers"
+    description="Published object markers."/>
+  <arg name="object_list_marker_array_config_file"
+    default="$(find-pkg-share ufil_visualization)/config/object_list.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="object_list_marker_array_node_name" default="object_list_marker_array_node"
+    description="Name of the node."/>
+
+  <group>
+    <include file="$(find-pkg-share ufil_visualization)/launch/object_list.launch.xml">
+      <arg name="use_sim_time" value="$(var object_list_marker_array_use_sim_time)"/>
+      <arg name="params_file" value="$(var object_list_marker_array_config_file)"/>
+      <arg name="namespace" value="$(var object_list_marker_array_namespace)"/>
+      <arg name="node_name" value="$(var object_list_marker_array_node_name)"/>
+      <arg name="input_topic" value="$(var object_list_marker_array_input_topic)"/>
+      <arg name="output_topic" value="$(var object_list_marker_array_output_topic)"/>
+    </include>
+  </group>
+</launch>

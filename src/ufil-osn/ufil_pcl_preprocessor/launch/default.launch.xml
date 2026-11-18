@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_pcl_preprocessor)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="input_topic" default="input_cloud" description="Raw lidar point cloud."/>
+
+  <node pkg="ufil_pcl_preprocessor" exec="ufil_pcl_preprocessor_node"
+    name="ufil_pcl_preprocessor" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_pcl_preprocessor)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="input_cloud" to="$(var input_topic)"/>
+  </node>
+</launch>

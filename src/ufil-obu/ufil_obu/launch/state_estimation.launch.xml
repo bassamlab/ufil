@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+  State estimation of the own vehicle: robot_localization fuses wheel odometry, IMU and GNSS,
+  object aggregation publishes the result as a UFIL object in UTM coordinates.
+-->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="namespace" default="obu" description="Namespace of the vehicle."/>
+  <arg name="robot_localization_params_file"
+    description="Parameters of ekf_filter_node_odom, ekf_filter_node_map and navsat_transform_node. Deployment specific (sensor set-up, datum)."/>
+  <arg name="frame_id_suffix" default=""
+    description="Suffix of the odom and base_link frames, e.g. to run several vehicles."/>
+  <arg name="object_aggregation_params_file"
+    default="$(find-pkg-share ufil_obu_object_aggregation)/config/default.yaml"
+    description="Object aggregation parameters, loaded on top of its package defaults."/>
+  <arg name="imu_topic" default="sensors/imu" description="IMU input."/>
+  <arg name="wheel_topic" default="sensors/wheel" description="Wheel odometry input."/>
+  <arg name="gnss_topic" default="sensors/gps" description="GNSS fix input."/>
+  <arg name="output_topic" default="object" description="Published own vehicle object."/>
+
+  <group>
+    <push-ros-namespace namespace="$(var namespace)"/>
+
+    <node pkg="robot_localization" exec="ekf_node" name="ekf_filter_node_odom" output="screen">
+      <param from="$(var robot_localization_params_file)"/>
+      <param name="map_frame" value="map"/>
+      <param name="odom_frame" value="odom$(var frame_id_suffix)"/>
+      <param name="base_link_frame" value="base_link$(var frame_id_suffix)"/>
+      <param name="world_frame" value="odom$(var frame_id_suffix)"/>
+      <param name="use_sim_time" value="$(var use_sim_time)"/>
+      <remap from="odometry/filtered" to="odometry/local"/>
+      <remap from="odometry/wheel" to="$(var wheel_topic)"/>
+      <remap from="imu" to="$(var imu_topic)"/>
+    </node>
+
+    <node pkg="robot_localization" exec="ekf_node" name="ekf_filter_node_map" output="screen">
+      <param from="$(var robot_localization_params_file)"/>
+      <param name="map_frame" value="map"/>
+      <param name="odom_frame" value="odom$(var frame_id_suffix)"/>
+      <param name="base_link_frame" value="base_link$(var frame_id_suffix)"/>
+      <param name="world_frame" value="map"/>
+      <param name="use_sim_time" value="$(var use_sim_time)"/>
+      <remap from="odometry/filtered" to="odometry/global"/>
+      <remap from="odometry/wheel" to="$(var wheel_topic)"/>
+      <remap from="imu" to="$(var imu_topic)"/>
+      <remap from="accel/filtered" to="filtered/accel"/>
+    </node>
+
+    <node pkg="robot_localization" exec="navsat_transform_node" name="navsat_transform_node"
+      output="screen">
+      <param from="$(var robot_localization_params_file)"/>
+      <param name="use_sim_time" value="$(var use_sim_time)"/>
+      <remap from="odometry/filtered" to="odometry/global"/>
+      <remap from="gps/fix" to="$(var gnss_topic)"/>
+      <remap from="gps/filtered" to="filtered/gps"/>
+      <remap from="imu" to="$(var imu_topic)"/>
+    </node>
+
+    <include file="$(find-pkg-share ufil_obu_object_aggregation)/launch/default.launch.xml">
+      <!-- The namespace is already pushed above. -->
+      <arg name="namespace" value=""/>
+      <arg name="use_sim_time" value="$(var use_sim_time)"/>
+      <arg name="params_file" value="$(var object_aggregation_params_file)"/>
+      <arg name="accel_topic" value="filtered/accel"/>
+      <arg name="odometry_topic" value="odometry/global"/>
+      <arg name="gnss_topic" value="filtered/gps"/>
+      <arg name="output_topic" value="$(var output_topic)"/>
+    </include>
+  </group>
+</launch>

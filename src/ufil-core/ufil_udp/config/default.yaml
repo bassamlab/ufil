@@ -1,0 +1,18 @@
+# Default parameters of the ufil_udp components, selected by node name. All parameters except the
+# diagnostic_updater ones are read-only. With these defaults the sender sends to the receiver.
+/**/udp_receiver:
+  ros__parameters:
+    listen_port: 5000
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true
+
+/**/udp_sender:
+  ros__parameters:
+    target_address: "127.0.0.1"
+    target_port: 5000
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file"
+    default="$(find-pkg-share ufil_examples_cpm_lab_adapter)/config/cpm_lab_adapter.yaml"
+    description="Parameters loaded on top of the package defaults."/>
+  <arg name="namespace" default="" description="Namespace of the node."/>
+  <arg name="node_name" default="cpm_lab_adapter" description="Name of the node."/>
+  <arg name="vehicle_ids" default="[1]" description="Ids of the CPM Lab vehicles, e.g. [12, 13]."/>
+  <arg name="target_frame" default="map" description="Frame of the published object lists."/>
+  <arg name="vehicle_state_topic" default="/lab/vehicle_{id}/vehicleState"
+    description="cpm_lab_lab_msgs/VehicleState input of each vehicle; {id} is the vehicle id."/>
+  <arg name="output_topic" default="object_list"
+    description="Published ufil_msgs/ObjectList with all vehicles."/>
+
+  <node pkg="ufil_examples_cpm_lab_adapter" exec="ufil_examples_cpm_lab_adapter_node"
+    name="$(var node_name)" namespace="$(var namespace)" output="screen">
+    <param from="$(find-pkg-share ufil_examples_cpm_lab_adapter)/config/cpm_lab_adapter.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="vehicle_ids" value="$(var vehicle_ids)"/>
+    <param name="target_frame" value="$(var target_frame)"/>
+    <param name="vehicle_state_topic" value="$(var vehicle_state_topic)"/>
+    <remap from="object_list" to="$(var output_topic)"/>
+  </node>
+</launch>

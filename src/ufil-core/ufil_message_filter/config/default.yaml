@@ -1,0 +1,13 @@
+# Default parameters of ufil_message_filter::ObjectListPositionFilterNode. All parameters are
+# read-only.
+/**:
+  ros__parameters:
+    area_of_interest:
+      # Forward every object. To forward only the objects inside an area, set enabled to true and
+      # add the polygon vertices [x1, y1, x2, y2, ...] [m] in the frame of the input object lists:
+      #   vertices: [0.0, 0.0, 10.0, 0.0, 10.0, 5.0, 0.0, 5.0]
+      enabled: false
+
+    diagnostic_updater:
+      period: 1.0
+      use_fqn: true

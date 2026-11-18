@@ -1,0 +1,27 @@
+# Default parameters of ufil_osn_tracker::OsnTrackerNode.
+/**:
+  ros__parameters:
+    # Fixed at startup.
+    target_frame: map
+    min_existence_probability: 0.2
+
+    association:
+      threshold: 4.0
+
+    track:
+      history_duration: 10.0
+
+    clustering:
+      min_points: 40
+      max_points: 50000
+      tolerance: 0.5
+
+    detector:
+      dimension_covariance_multiplier: 10.0
+      position_covariance_multiplier: 0.5
+      orientation_covariance_multiplier: 0.01
+
+    diagnostic_updater:
+      period: 1.0
+      # Prefix diagnostic names with the node namespace to tell multiple sensor nodes apart.
+      use_fqn: true

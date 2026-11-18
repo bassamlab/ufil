@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+  Starts the UDP receiver (UDP port listen_port -> udp_output) and the UDP sender
+  (udp_input -> target_address:target_port) with config/default.yaml.
+-->
+<launch>
+  <arg name="use_sim_time" default="false" description="Use the /clock topic as time source."/>
+  <arg name="params_file" default="$(find-pkg-share ufil_udp)/config/default.yaml"
+    description="Parameters loaded on top of the package defaults (keys /**/udp_receiver and /**/udp_sender)."/>
+  <arg name="namespace" default="" description="Namespace of the nodes."/>
+  <arg name="output_topic" default="udp_output" description="Published received UDP packets."/>
+  <arg name="input_topic" default="udp_input" description="Subscribed UDP packets to send."/>
+
+  <node pkg="ufil_udp" exec="udp_receive_node" name="udp_receiver" namespace="$(var namespace)"
+    output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="udp_output" to="$(var output_topic)"/>
+  </node>
+
+  <node pkg="ufil_udp" exec="udp_sender_node" name="udp_sender" namespace="$(var namespace)"
+    output="screen">
+    <param from="$(find-pkg-share ufil_udp)/config/default.yaml"/>
+    <param from="$(var params_file)"/>
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <remap from="udp_input" to="$(var input_topic)"/>
+  </node>
+</launch>
